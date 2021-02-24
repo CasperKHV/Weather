@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">Weather application</string>
+    <string name="choose_city">CHOOSE A CITY FROM THE LIST</string>
+    <string name="share">Share with a friend</string>
+    <string name="repeat_choose_city">REPEAT CITY CHOICE</string>
+    <string name="checkbox_pressure">Pressure</string>
+    <string name="checkbox_feels">Feels like</string>
+    <string name="checkbox_humidity">Humidity</string>
+    <string name="text_holder">The forecast will appear here</string>
+
+    <string name="nav_header_title">Wheater</string>
+    <string name="nav_header_subtitle">Email</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+
+    <string-array name="cityes_selection">
+        <item>Khabarovsk</item>
+        <item>St. Petersburg</item>
+        <item>Moscow</item>
+    </string-array>
+
+    <string-array name="cityes_weather">
+        <item>Now in Khabarovsk: \</item>
+        <item>Now in St. Petersburg: \</item>
+        <item>Now in Moscow: \</item>
+    </string-array>
+
+    <string-array name="pressure">
+        <item>Pressure in Khabarovsk</item>
+        <item>Pressure in St. Petersburg</item>
+        <item>Pressure in Moscow</item>
+    </string-array>
+
+    <string-array name="tomorrow">
+        <item>Tomorrow in Khabarovsk</item>
+        <item>Tomorrow in St. Petersburg</item>
+        <item>Tomorrow in Moscow</item>
+    </string-array>
+
+    <string-array name="week">
+        <item>the Week in Khabarovsk</item>
+        <item>the Week in St. Petersburg</item>
+        <item>the Week in Moscow</item>
+    </string-array>
+
+    <string name="choose_city_for_land">CHOOSE CITY</string>
+    <string name="first_button">First button</string>
+    <string name="second_button">Second button</string>
+    <string name="third_button">Third button</string>
+    <string name="open_popup">open popup</string>
+    <string name="context_menu_hide">hide image</string>
+    <string name="context_menu_show_background">show background</string>
+    <string name="context_menu_delete_background">delete background</string>
+    <string name="main_fragment">Main application</string>
+    <string name="hello_blank_fragment">Fragment for NVtest</string>
+    <string name="fragment_for_n_v">FragmentForNV</string>
+    <string name="celsius">\ ℃, \</string>
+    <string name="mm_hg">\ мм рт. ст.\</string>
+    <string name="percent">\ %\</string>
+    <string name="humidity">\Влажность: \</string>
+    <string name="language">en</string>
+    <string name="for_wind">\ м/с, \</string>
+    <string name="for_wind_beggining">\Wind: \</string>
+    <string name="for_feels_beggining">\Feels like: \</string>
+
+    <string-array name="city_names">
+        <item>Khabarovsk,ru</item>
+        <item>Saint Petersburg,ru</item>
+        <item>Moscow,ru</item>
+    </string-array>
+
+
+</resources>

@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Погодное приложение</string>
+    <string name="choose_city">ВЫБЕРИТЕ ГОРОД ИЗ СПИСКА</string>
+    <string name="share">Поделиться с другом</string>
+    <string name="repeat_choose_city">ПОВТОРИТЕ ВЫБОР ГОРОДА</string>
+    <string name="checkbox_pressure">Давление</string>
+    <string name="checkbox_feels">Ощущается как</string>
+    <string name="checkbox_humidity">Влажность</string>
+    <string name="text_holder">Здесь появится прогноз</string>
+
+    <string name="nav_header_title">Погода</string>
+    <string name="nav_header_subtitle">Email</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="choose_city_for_land">ВЫБЕРИТЕ ГОРОД</string>
+    <string name="first_button">Первая кнопка</string>
+    <string name="second_button">Вторая кнопка</string>
+    <string name="third_button">Третья кнопка</string>
+    <string name="open_popup">Открыть popup</string>
+    <string name="context_menu_hide">Скрыть изображение</string>
+    <string name="context_menu_show_background">Показать фон</string>
+    <string name="context_menu_delete_background">Удалить фон</string>
+    <string name="main_fragment">Основное приложение</string>
+    <string name="hello_blank_fragment">Фрагмент для NVtest</string>
+    <string name="fragment_for_n_v">FragmentForNV</string>
+    <string name="celsius">\ ℃, \</string>
+    <string name="mm_hg">\ мм рт. ст.\</string>
+    <string name="percent">\ %\</string>
+    <string name="humidity">\Влажность: \</string>
+    <string name="language">ru</string>
+    <string name="for_wind">\ м/с, \</string>
+    <string name="for_wind_beggining">\Ветер: \</string>
+    <string name="for_feels_beggining">\Ощущается как: \</string>
+
+    <string-array name="cityes_selection">
+        <item>Хабаровск</item>
+        <item>Санкт-Петербург</item>
+        <item>Москва</item>
+    </string-array>
+
+    <string-array name="cityes_weather">
+        <item>Сейчас в Хабаровске: \</item>
+        <item>Сейчас в Санкт-Петербурге: \</item>
+        <item>Сейчас в Москве: \</item>
+    </string-array>
+
+
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_list_fragment">
+
+    <fragment
+        android:id="@+id/nav_list_fragment"
+        android:name="com.example.coloreffect.CitiesListFragment"
+        android:label="@string/main_fragment"
+        tools:layout="@layout/fragment_cities_list" />
+
+    <fragment
+        android:id="@+id/nav_fragment_for_n_v"
+        android:name="com.example.coloreffect.FragmentForNV"
+        android:label="@string/fragment_for_n_v"
+        tools:layout="@layout/fragment_for_n_v" />
+</navigation>
