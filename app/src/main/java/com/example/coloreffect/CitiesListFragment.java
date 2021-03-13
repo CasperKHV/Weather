@@ -1,6 +1,7 @@
 package com.example.coloreffect;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CitiesListFragment extends Fragment {
 
 
-    private static final String SAVED_CITY = "savedCity";
+    public static final String SAVED_CITY = "savedCity";
     private SharedPreferences savedCity;
     public static final String RESULT_OK_STRING = "Ok";
 
@@ -31,6 +32,7 @@ public class CitiesListFragment extends Fragment {
     private static final String CHECK_BOX_PRESSURE = "checkBoxPressure";
     private static final String CHECK_BOX_FEELS = "checkBoxFeels";
     private static final String CHECK_BOX_HUMIDITY = "checkBoxWeek";
+    public static final String PREVIOUS_WEATHER_ID = "previous weather id";
 
     public static final int REQUEST_CODE = 100;
     private TextView descriptionText;
@@ -77,6 +79,10 @@ public class CitiesListFragment extends Fragment {
         checkBoxPressure.setChecked(savedCity.getBoolean(CHECK_BOX_PRESSURE, false));
         checkBoxFeels.setChecked(savedCity.getBoolean(CHECK_BOX_FEELS, false));
         checkBoxHumidity.setChecked(savedCity.getBoolean(CHECK_BOX_HUMIDITY, false));
+        int previousWeatherId = savedCity.getInt(PREVIOUS_WEATHER_ID, -1);
+        if (previousWeatherId != -1) {
+            showActivity(previousWeatherId);
+        }
     }
 
     private class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -131,6 +137,7 @@ public class CitiesListFragment extends Fragment {
                 String resultFeels = null;
                 String resultHumidity = null;
                 String iconCode = null;
+                savedCity.edit().putInt(PREVIOUS_WEATHER_ID, categoryId).apply();
                 String[] cityNamesForAPI = getResources().getStringArray(R.array.city_names);
                 ModelForGSONWeatherClass weather = controller.start(getActivity(), cityNamesForAPI[categoryId]);
 
