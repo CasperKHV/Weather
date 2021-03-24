@@ -31,6 +31,13 @@
     <string name="for_wind">\ м/с, \</string>
     <string name="for_wind_beggining">\Ветер: \</string>
     <string name="for_feels_beggining">\Ощущается как: \</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_load">Загрузить</string>
+    <string name="button_delete">Удалить</string>
+    <string name="toast_external_storage_not_found">Внешнее хранилище не найдено</string>
+    <string name="toast_file_deleted">Файл удалён</string>
+    <string name="toast_file_not_exist">Файл не существует</string>
+    <string name="show_image_from_internet">ПОКАЗАТЬ КАРТИНКУ ИЗ ИНТЕРНЕТА</string>
 
     <string-array name="cityes_selection">
         <item>Хабаровск</item>

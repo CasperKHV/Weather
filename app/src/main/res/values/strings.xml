@@ -62,6 +62,13 @@
     <string name="for_wind">\ м/с, \</string>
     <string name="for_wind_beggining">\Wind: \</string>
     <string name="for_feels_beggining">\Feels like: \</string>
+    <string name="button_save">Save</string>
+    <string name="button_load">Load</string>
+    <string name="button_delete">Delete</string>
+    <string name="toast_external_storage_not_found">External storage is not found</string>
+    <string name="toast_file_deleted">File is deleted</string>
+    <string name="toast_file_not_exist">File is not exist</string>
+    <string name="show_image_from_internet">SHOW IMAGE FROM INTERNET</string>
 
     <string-array name="city_names">
         <item>Khabarovsk,ru</item>

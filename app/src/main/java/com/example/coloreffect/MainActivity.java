@@ -1,12 +1,14 @@
 package com.example.coloreffect;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements CitiesListFragmen
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
 
     }
 
@@ -107,11 +108,10 @@ public class MainActivity extends AppCompatActivity implements CitiesListFragmen
         if (descriptionText != null) {
             if (requestCode == CitiesListFragment.REQUEST_CODE && data != null) {
                 descriptionText.setText(data.getStringExtra(CitiesListFragment.RESULT_OK_STRING));
-
             }
+            SharedPreferences sharedPreferences = getSharedPreferences(CitiesListFragment.SAVED_CITY, MODE_PRIVATE);
+            sharedPreferences.edit().putInt(CitiesListFragment.PREVIOUS_WEATHER_ID, -1).apply();
         }
-
-
     }
 
     @Override
