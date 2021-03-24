@@ -131,6 +131,7 @@ public class CitiesListFragment extends Fragment {
 
     private void showActivity(int categoryId) {
         new Thread() {
+            @Override
             public void run() {
                 Controller controller = new Controller();
                 String resultPressure = null;
