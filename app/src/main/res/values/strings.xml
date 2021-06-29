@@ -69,8 +69,17 @@
     <string name="toast_file_deleted">File is deleted</string>
     <string name="toast_file_not_exist">File is not exist</string>
     <string name="show_image_from_internet">SHOW IMAGE FROM INTERNET</string>
+    <string name="city_add_layout">City</string>
+    <string name="city_for_gson_add_layout">City for GSON</string>
+    <string name="delete_main_context_menu">Delete</string>
+    <string name="edit_main_context_menu">Edit</string>
+    <string name="main_menu_add_a_note">Add a note</string>
+    <string name="main_menu_clear_all">Clear all</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="alert_title_add">Title</string>
+    <string name="menu_add">Add a City</string>
 
-    <string-array name="city_names">
+    <string-array name="city_names_for_load_weather">
         <item>Khabarovsk,ru</item>
         <item>Saint Petersburg,ru</item>
         <item>Moscow,ru</item>

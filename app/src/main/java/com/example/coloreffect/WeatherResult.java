@@ -61,7 +61,7 @@ public class WeatherResult extends AppCompatActivity {
 
     public void showPopup(View view) {
         PopupMenu popup = new PopupMenu(this, view);
-        popup.inflate(R.menu.my_menu);
+        popup.inflate(R.menu.main_menu);
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
