@@ -38,6 +38,15 @@
     <string name="toast_file_deleted">Файл удалён</string>
     <string name="toast_file_not_exist">Файл не существует</string>
     <string name="show_image_from_internet">ПОКАЗАТЬ КАРТИНКУ ИЗ ИНТЕРНЕТА</string>
+    <string name="city_add_layout">City</string>
+    <string name="city_for_gson_add_layout">City for GSON</string>
+    <string name="delete_main_context_menu">Delete</string>
+    <string name="edit_main_context_menu">Edit</string>
+    <string name="main_menu_add_a_note">Add a note</string>
+    <string name="main_menu_clear_all">Clear all</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="alert_title_add">Title</string>
+    <string name="menu_add">Add a City</string>
 
     <string-array name="cityes_selection">
         <item>Хабаровск</item>

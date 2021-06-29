@@ -1,15 +1,16 @@
 package com.example.coloreffect;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class CitiesListFragment extends Fragment {
+
+    private boolean errorCode;
+
+    private NoteDataSource notesDataSource;     // Источник данных
+    private NoteDataReader noteDataReader;      // Читатель данных
+    private MyAdapter adapter;                // Адаптер для RecyclerView
 
 
     public static final String SAVED_CITY = "savedCity";
@@ -41,6 +48,8 @@ public class CitiesListFragment extends Fragment {
 
     interface CitiesListListener {
         void onListItemClick(int id, DataForBundle dataForBundle, TextView descriptionText);
+
+        void transfer(NoteDataSource notesDataSourceNoteDataSource, NoteDataReader noteDataReader, MyAdapter adapter);
     }
 
 
@@ -59,11 +68,35 @@ public class CitiesListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cities_list, container, false);
-        RecyclerView cityesCategoriesRecyclerView = rootView.findViewById(R.id.recycler_view);
+
+        initDataSource();
+
+        RecyclerView citiesCategoriesRecyclerView = rootView.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
-        cityesCategoriesRecyclerView.setLayoutManager(layoutManager);
-        cityesCategoriesRecyclerView.setAdapter(new MyAdapter());
+        citiesCategoriesRecyclerView.setLayoutManager(layoutManager);
+//        citiesCategoriesRecyclerView.setAdapter(new MyAdapter());
+
+        adapter = new MyAdapter();
+        citiesCategoriesRecyclerView.setAdapter(adapter);
+
+//        adapter = new NoteAdapter(noteDataReader);
+//        adapter.setOnMenuItemClickListener(new NoteAdapter.OnMenuItemClickListener() {
+//            @Override
+//            public void onItemEditClick(CityNote note) {
+//                editElement(note);
+//            }
+//
+//            @Override
+//            public void onItemDeleteClick(CityNote note) {
+//                deleteElement(note);
+//            }
+//        });
+//        citiesCategoriesRecyclerView.setAdapter(adapter);
+        citiesListListener.transfer(notesDataSource, noteDataReader, adapter);
+        if (noteDataReader.getCount() == 0) {
+            initCities();
+        }
 
 
         initializeViews(rootView);
@@ -87,21 +120,26 @@ public class CitiesListFragment extends Fragment {
 
     private class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private int[] ID = new int[]{R.drawable.khv_image, R.drawable.spb_image, R.drawable.moscow_image};
         private TextView categoryNameTextView;
         private ImageView photo;
+        private TextView textNote;
+        private CityNote note;
 
         MyViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.category_list_item, parent, false));
             itemView.setOnClickListener(this);
             categoryNameTextView = (TextView) itemView.findViewById(R.id.category_name_text_view);
-            photo = itemView.findViewById(R.id.photo);
         }
 
-        void bind(int position) {
-            String category = getResources().getStringArray(R.array.cityes_selection)[position];
-            categoryNameTextView.setText(category);
-            photo.setImageResource(ID[position]);
+
+//        void bind(int position) {
+//            String category = getResources().getStringArray(R.array.cityes_selection)[position];
+//            categoryNameTextView.setText(category);
+//        }
+
+        public void bind(CityNote note) {
+            this.note = note;
+            categoryNameTextView.setText(note.getTitle());
         }
 
         @Override
@@ -110,7 +148,7 @@ public class CitiesListFragment extends Fragment {
         }
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -118,19 +156,32 @@ public class CitiesListFragment extends Fragment {
             return new MyViewHolder(inflater, parent);
         }
 
+//        @Override
+//        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//// Создаем новый элемент пользовательского интерфейса
+//// Через Inflater
+//            View v = LayoutInflater.from(parent.getContext())
+//                    .inflate(R.layout.category_list_item, parent, false);
+//// Здесь можно установить всякие параметры
+//            MyViewHolder vh = new MyViewHolder(inf);
+//            return vh;
+//        }
+
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.bind(position);
+//            holder.bind(position);
+            holder.bind(noteDataReader.getPosition(position));
         }
 
         @Override
         public int getItemCount() {
-            return getResources().getStringArray(R.array.cityes_selection).length;
+//            return getResources().getStringArray(R.array.cityes_selection).length;
+            return noteDataReader.getCount();
         }
     }
 
     private void showActivity(int categoryId) {
-        new Thread() {
+        Thread thread = new Thread() {
             @Override
             public void run() {
                 Controller controller = new Controller();
@@ -138,10 +189,15 @@ public class CitiesListFragment extends Fragment {
                 String resultFeels = null;
                 String resultHumidity = null;
                 String iconCode = null;
+                String city = noteDataReader.getPosition(categoryId).getDescription();
                 savedCity.edit().putInt(PREVIOUS_WEATHER_ID, categoryId).apply();
-                String[] cityNamesForAPI = getResources().getStringArray(R.array.city_names);
-                ModelForGSONWeatherClass weather = controller.start(getActivity(), cityNamesForAPI[categoryId]);
-
+                String[] cityNamesForAPI = getResources().getStringArray(R.array.city_names_for_load_weather);
+//                ModelForGSONWeatherClass weather = controller.start(getActivity(), cityNamesForAPI[categoryId]);
+                ModelForGSONWeatherClass weather = controller.start(getActivity(), city);
+                if (weather == null) {
+                    errorCode = true;
+                    return;
+                }
                 String resultWeather = WeatherSpec.getWeather(getActivity(), categoryId, weather);
                 if (checkBoxPressure.isChecked()) {
 
@@ -162,7 +218,17 @@ public class CitiesListFragment extends Fragment {
                 DataForBundle dataForBundle = new DataForBundle(resultPressure, resultFeels, resultHumidity, resultWeather, iconCode, categoryId);
                 citiesListListener.onListItemClick(categoryId, dataForBundle, descriptionText);
             }
-        }.start();
+        };
+        thread.start();
+        try{
+            thread.join();
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        if (errorCode) {
+            errorCode = false;
+            Toast.makeText(getActivity(), "City not found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initializeViews(View view) {
@@ -185,6 +251,34 @@ public class CitiesListFragment extends Fragment {
         savedCity.edit().putBoolean(CHECK_BOX_FEELS, checkBoxFeels.isChecked()).apply();
         savedCity.edit().putBoolean(CHECK_BOX_HUMIDITY, checkBoxHumidity.isChecked()).apply();
         super.onSaveInstanceState(outState);
+    }
+
+    private void editElement(CityNote note) {
+        notesDataSource.editNote(note, "Edited", "Edited title");
+        dataUpdated();
+    }
+
+    private void deleteElement(CityNote note) {
+        notesDataSource.deleteNote(note);
+        dataUpdated();
+    }
+
+    private void dataUpdated() {
+        noteDataReader.Refresh();
+        adapter.notifyDataSetChanged();
+    }
+
+    private void initDataSource() {
+        notesDataSource = new NoteDataSource(getActivity());
+        notesDataSource.open();
+        noteDataReader = notesDataSource.getNoteDataReader();
+    }
+
+    private void initCities() {
+        notesDataSource.addNote(getActivity().getResources().getStringArray(R.array.cityes_selection)[0], getActivity().getResources().getStringArray(R.array.city_names_for_load_weather)[0]);
+        notesDataSource.addNote(getActivity().getResources().getStringArray(R.array.cityes_selection)[1], getActivity().getResources().getStringArray(R.array.city_names_for_load_weather)[1]);
+        notesDataSource.addNote(getActivity().getResources().getStringArray(R.array.cityes_selection)[2], getActivity().getResources().getStringArray(R.array.city_names_for_load_weather)[2]);
+        dataUpdated();
     }
 
 

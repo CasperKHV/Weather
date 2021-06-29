@@ -1,19 +1,20 @@
 package com.example.coloreffect;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -32,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements CitiesListFragmen
     private TextView descriptionText;
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    private NoteDataSource notesDataSource;     // Источник данных
+    private NoteDataReader noteDataReader;      // Читатель данных
+    private CitiesListFragment.MyAdapter adapter;                // Адаптер для RecyclerView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +108,13 @@ public class MainActivity extends AppCompatActivity implements CitiesListFragmen
     }
 
     @Override
+    public void transfer(NoteDataSource notesDataSourceNoteDataSource, NoteDataReader noteDataReader, CitiesListFragment.MyAdapter adapter) {
+        this.notesDataSource = notesDataSourceNoteDataSource;
+        this.noteDataReader = noteDataReader;
+        this.adapter = adapter;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (descriptionText != null) {
@@ -116,19 +128,55 @@ public class MainActivity extends AppCompatActivity implements CitiesListFragmen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.my_menu, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menu_button_1 || id == R.id.menu_button_2 || id == R.id.menu_button_3) {
-            Toast toast = Toast.makeText(this, item.toString(), Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.BOTTOM, 0, 0);
-            toast.show();
+        switch (item.getItemId()) {
+            case R.id.menu_add:
+                addElement();
+                return true;
+            case R.id.menu_clear:
+                clearList();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return false;
+    }
+
+    private void clearList() {
+        notesDataSource.deleteAll();
+        dataUpdated();
+    }
+
+    private void addElement() {
+// Выведем диалоговое окно для ввода новой записи
+        LayoutInflater factory = LayoutInflater.from(this);
+// alertView пригодится в дальнейшем для поиска пользовательских элементов
+        final View alertView = factory.inflate(R.layout.layout_add_city_note, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(alertView);
+        builder.setTitle(R.string.alert_title_add);
+        builder.setNegativeButton(R.string.alert_cancel, null);
+        builder.setPositiveButton(R.string.menu_add, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                EditText editTextNote = alertView.findViewById(R.id.editTextNote);
+                EditText editTextNoteTitle = alertView.findViewById(R.id.editTextNoteTitle);
+// Если использовать findViewById без alertView, то всегда будем получать editText = null
+                notesDataSource.addNote(editTextNoteTitle.getText().toString(), editTextNote.getText().toString());
+                dataUpdated();
+            }
+        });
+        builder.show();
+    }
+
+
+    private void dataUpdated() {
+        noteDataReader.Refresh();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -30,6 +30,9 @@ public class Controller implements Callback<ModelForGSONWeatherClass> {
         Call<ModelForGSONWeatherClass> call = interfaceForRetrofit.loadWeather(OPEN_API_KEY, city, "metric", context.getString(R.string.language));
         try {
             Response<ModelForGSONWeatherClass> response = call.execute();
+            if(response.code()!=200){
+                return null;
+            }
             weather = response.body();
         } catch (IOException e) {
             e.printStackTrace();
