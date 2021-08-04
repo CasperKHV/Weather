@@ -8,8 +8,7 @@ final class WeatherSpec {
     }
 
     static String getWeather(Context context, int position, ModelForGSONWeatherClass weather) {
-        String[] city = context.getResources().getStringArray(R.array.cityes_weather);
-        return city[position] + weather.main.temp + context.getString(R.string.celsius) + "\n" + context.getString(R.string.for_wind_beggining) + weather.wind.getSpeed() + context.getString(R.string.for_wind) + "\n" + weather.weather[0].getDescription();
+        return context.getString(R.string.now_in) + weather.getName() + "\": " + weather.main.temp + context.getString(R.string.celsius) + "\n" + context.getString(R.string.for_wind_beggining) + weather.wind.getSpeed() + context.getString(R.string.for_wind) + "\n" + weather.weather[0].getDescription();
 
 
     }

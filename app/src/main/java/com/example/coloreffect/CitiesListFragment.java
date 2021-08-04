@@ -1,19 +1,26 @@
 package com.example.coloreffect;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -129,6 +136,17 @@ public class CitiesListFragment extends Fragment {
             super(inflater.inflate(R.layout.category_list_item, parent, false));
             itemView.setOnClickListener(this);
             categoryNameTextView = (TextView) itemView.findViewById(R.id.category_name_text_view);
+
+// При долгом нажатии на элементе – вытащим  меню
+            categoryNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    showPopupMenu(categoryNameTextView);
+                    return true;
+                }
+            });
+            // при быстром нажатии откроем инфу о погоде в выбранном городе
+            categoryNameTextView.setOnClickListener(this);
         }
 
 
@@ -145,6 +163,31 @@ public class CitiesListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             showActivity(this.getLayoutPosition());
+        }
+
+        private void showPopupMenu(View view) {
+// Покажем меню на элементе
+            PopupMenu popup = new PopupMenu(view.getContext(), view);
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.main_context_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                // Обработка выбора пункта меню
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+// Делегируем обработку слушателю
+                    switch (item.getItemId()) {
+                        case R.id.menu_edit:
+                            editElement(note);
+                            return true;
+                        case R.id.menu_delete:
+                            deleteElement(note);
+                            return true;
+                    }
+                    return false;
+                }
+            });
+            popup.show();
         }
     }
 
@@ -220,9 +263,9 @@ public class CitiesListFragment extends Fragment {
             }
         };
         thread.start();
-        try{
+        try {
             thread.join();
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         if (errorCode) {
@@ -254,8 +297,27 @@ public class CitiesListFragment extends Fragment {
     }
 
     private void editElement(CityNote note) {
-        notesDataSource.editNote(note, "Edited", "Edited title");
-        dataUpdated();
+        // Выведем диалоговое окно для редактирования записи
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+// alertView пригодится в дальнейшем для поиска пользовательских элементов
+        final View alertView = factory.inflate(R.layout.layout_add_city_note, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(alertView);
+        builder.setTitle(R.string.alert_title_add);
+        EditText editTextNote = alertView.findViewById(R.id.editTextNote);
+        EditText editTextNoteTitle = alertView.findViewById(R.id.editTextNoteTitle);
+        // Если использовать findViewById без alertView, то всегда будем получать editText = null
+        editTextNoteTitle.setText(note.getTitle());
+        editTextNote.setText(note.getDescription());
+        builder.setNegativeButton(R.string.alert_cancel, null);
+        builder.setPositiveButton(R.string.refresh_the_note, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                notesDataSource.editNote(note, editTextNoteTitle.getText().toString(), editTextNote.getText().toString());
+                dataUpdated();
+            }
+        });
+        builder.show();
     }
 
     private void deleteElement(CityNote note) {
@@ -280,6 +342,4 @@ public class CitiesListFragment extends Fragment {
         notesDataSource.addNote(getActivity().getResources().getStringArray(R.array.cityes_selection)[2], getActivity().getResources().getStringArray(R.array.city_names_for_load_weather)[2]);
         dataUpdated();
     }
-
-
 }

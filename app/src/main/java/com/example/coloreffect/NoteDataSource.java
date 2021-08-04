@@ -48,7 +48,7 @@ public class NoteDataSource implements Closeable {
     }
 
     // Изменить запись
-    public void editNote(CityNote note, String description, String title) {
+    public void editNote(CityNote note, String title, String description) {
         ContentValues editedNote = new ContentValues();
         editedNote.put(DatabaseHelper.COLUMN_ID, note.getId());
         editedNote.put(DatabaseHelper.COLUMN_NOTE, description);
