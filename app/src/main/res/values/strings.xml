@@ -19,12 +19,6 @@
         <item>Moscow</item>
     </string-array>
 
-    <string-array name="cityes_weather">
-        <item>Now in Khabarovsk: \</item>
-        <item>Now in St. Petersburg: \</item>
-        <item>Now in Moscow: \</item>
-    </string-array>
-
     <string-array name="pressure">
         <item>Pressure in Khabarovsk</item>
         <item>Pressure in St. Petersburg</item>
@@ -76,8 +70,10 @@
     <string name="main_menu_add_a_note">Add a note</string>
     <string name="main_menu_clear_all">Clear all</string>
     <string name="alert_cancel">Cancel</string>
-    <string name="alert_title_add">Title</string>
+    <string name="alert_title_add">Enter information about the city</string>
     <string name="menu_add">Add a City</string>
+    <string name="now_in">Now in \"</string>
+    <string name="refresh_the_note">Refresh the Note</string>
 
     <string-array name="city_names_for_load_weather">
         <item>Khabarovsk,ru</item>

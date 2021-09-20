@@ -2,6 +2,7 @@ package com.example.coloreffect;
 
 public class ModelForGSONWeatherClass {
     String base;
+    String name;
     MainForGSON main;
     WeatherForGSON[] weather;
     WindForGSON wind;
@@ -40,5 +41,13 @@ public class ModelForGSONWeatherClass {
 
     public void setWind(WindForGSON wind) {
         this.wind = wind;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

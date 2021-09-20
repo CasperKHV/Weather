@@ -12,14 +12,16 @@ public class DataForBundle implements Serializable {
     String message;
     String iconCode;
     int photoWeather;
+    String city;
 
-    public DataForBundle(String resultPressure, String resultFeels, String resultHumidity, String message, String iconCode, int photoWeather) {
+    public DataForBundle(String resultPressure, String resultFeels, String resultHumidity, String message, String iconCode, int photoWeather, String city) {
         this.resultPressure = resultPressure;
         this.resultFeels = resultFeels;
         this.resultHumidity = resultHumidity;
         this.message = message;
         this.iconCode = iconCode;
         this.photoWeather = photoWeather;
+        this.city = city;
     }
 
     public String getResultPressure() {
@@ -68,5 +70,13 @@ public class DataForBundle implements Serializable {
 
     public void setIconCode(String iconCode) {
         this.iconCode = iconCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

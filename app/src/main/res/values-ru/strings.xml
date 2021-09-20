@@ -40,24 +40,20 @@
     <string name="show_image_from_internet">ПОКАЗАТЬ КАРТИНКУ ИЗ ИНТЕРНЕТА</string>
     <string name="city_add_layout">City</string>
     <string name="city_for_gson_add_layout">City for GSON</string>
-    <string name="delete_main_context_menu">Delete</string>
-    <string name="edit_main_context_menu">Edit</string>
-    <string name="main_menu_add_a_note">Add a note</string>
-    <string name="main_menu_clear_all">Clear all</string>
-    <string name="alert_cancel">Cancel</string>
-    <string name="alert_title_add">Title</string>
-    <string name="menu_add">Add a City</string>
+    <string name="delete_main_context_menu">Удалить город</string>
+    <string name="edit_main_context_menu">Редактировать</string>
+    <string name="main_menu_add_a_note">Добавить город</string>
+    <string name="main_menu_clear_all">Очистить список городов</string>
+    <string name="alert_cancel">Отмена</string>
+    <string name="alert_title_add">Внесите данные о городе</string>
+    <string name="menu_add">Добавить город</string>
+    <string name="now_in">Сейчас в городе \"</string>
+    <string name="refresh_the_note">Обновить запись</string>
 
     <string-array name="cityes_selection">
         <item>Хабаровск</item>
         <item>Санкт-Петербург</item>
         <item>Москва</item>
-    </string-array>
-
-    <string-array name="cityes_weather">
-        <item>Сейчас в Хабаровске: \</item>
-        <item>Сейчас в Санкт-Петербурге: \</item>
-        <item>Сейчас в Москве: \</item>
     </string-array>
 
 
