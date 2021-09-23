@@ -43,6 +43,7 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
     private MyAdapter adapter;                // Адаптер для RecyclerView
     private HistoryListListener historyListListener;
     String city;
+    String history;
 
     private DataForBundle dataForBundle;
     private TextView weatherText;
@@ -95,6 +96,7 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
             message = dataForBundle.getMessage();
             photoWeatherCode = dataForBundle.getIconCode();
             city = dataForBundle.getCity();
+            history = dataForBundle.getHistory();
         } else {
             throw new RuntimeException("DataForBundle is empty");
         }
@@ -177,13 +179,13 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
             getActivity().setResult(Activity.RESULT_OK, intentResult);
         }
 
-        if (city != null) {
+        if (city != null && history != null) {
             initDataSource();
             Log.d("кол-во", Integer.toString(noteDataReaderForHistory.getCount()));
             if (noteDataReaderForHistory.getCount() == 0) {
-                noteDataSourceForHistory.addNote(city, message);
+                noteDataSourceForHistory.addNote(city, history);
             } else {
-                noteDataSourceForHistory.editNote(city, message);
+                noteDataSourceForHistory.editNote(city, history);
             }
         }
 

@@ -243,6 +243,7 @@ public class CitiesListFragment extends Fragment {
                 }
                 String cityForBundle = weather.getName();
                 String resultWeather = WeatherSpec.getWeather(getActivity(), categoryId, weather);
+                String resultWeatherHistory = WeatherSpec.getWeatherHistory(getActivity(), weather);
                 if (checkBoxPressure.isChecked()) {
 
                     if (weather != null) {
@@ -259,7 +260,7 @@ public class CitiesListFragment extends Fragment {
                 }
 
                 iconCode = weather.weather[0].getIcon();
-                DataForBundle dataForBundle = new DataForBundle(resultPressure, resultFeels, resultHumidity, resultWeather, iconCode, categoryId, cityForBundle);
+                DataForBundle dataForBundle = new DataForBundle(resultPressure, resultFeels, resultHumidity, resultWeather, resultWeatherHistory, iconCode, categoryId, cityForBundle);
                 citiesListListener.onListItemClick(categoryId, dataForBundle, descriptionText);
             }
         };

@@ -49,6 +49,8 @@
     <string name="menu_add">Добавить город</string>
     <string name="now_in">Сейчас в городе \"</string>
     <string name="refresh_the_note">Обновить запись</string>
+    <string name="it_was">\ было</string>
+    <string name="at">\ в \</string>
 
     <string-array name="cityes_selection">
         <item>Хабаровск</item>
