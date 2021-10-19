@@ -76,6 +76,9 @@
     <string name="refresh_the_note">Refresh the Note</string>
     <string name="it_was">\ it was</string>
     <string name="at">\ at \</string>
+    <string name="Close">Close</string>
+    <string name="delete_this_note">Delete this note</string>
+    <string name="delete_all_history">Delete all history</string>
 
     <string-array name="city_names_for_load_weather">
         <item>Khabarovsk,ru</item>

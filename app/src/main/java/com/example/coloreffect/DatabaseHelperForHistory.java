@@ -10,6 +10,7 @@ public class DatabaseHelperForHistory extends SQLiteOpenHelper {
     static final String TABLE_NOTES = "history"; // Название таблицы в БД
     // Названия столбцов
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_DATE = "date";// день сбора данных
     public static final String COLUMN_NOTE_TITLE = "title";// Здесь должен быть город
     public static final String COLUMN_NOTE = "note";// Здесь должны быть сохранённые данные о погоде
 
@@ -20,7 +21,7 @@ public class DatabaseHelperForHistory extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NOTES + " (" + COLUMN_ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_NOTE
+                + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_DATE + " TEXT," + COLUMN_NOTE
                 + " TEXT," + COLUMN_NOTE_TITLE + " TEXT);");
     }
 

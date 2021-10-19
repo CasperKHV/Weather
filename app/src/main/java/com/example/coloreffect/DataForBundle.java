@@ -10,16 +10,18 @@ public class DataForBundle implements Serializable {
     String resultFeels;
     String resultHumidity;
     String message;
+    String dateForHistory;
     String history;
     String iconCode;
     int photoWeather;
     String city;
 
-    public DataForBundle(String resultPressure, String resultFeels, String resultHumidity, String message, String history, String iconCode, int photoWeather, String city) {
+    public DataForBundle(String resultPressure, String resultFeels, String resultHumidity, String message, String dateForHistory, String history, String iconCode, int photoWeather, String city) {
         this.resultPressure = resultPressure;
         this.resultFeels = resultFeels;
         this.resultHumidity = resultHumidity;
         this.message = message;
+        this.dateForHistory = dateForHistory;
         this.history = history;
         this.iconCode = iconCode;
         this.photoWeather = photoWeather;
@@ -88,5 +90,13 @@ public class DataForBundle implements Serializable {
 
     public void setHistory(String history) {
         this.history = history;
+    }
+
+    public String getDateForHistory() {
+        return dateForHistory;
+    }
+
+    public void setDateForHistory(String dateForHistory) {
+        this.dateForHistory = dateForHistory;
     }
 }

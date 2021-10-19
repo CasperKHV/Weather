@@ -18,19 +18,21 @@ final class WeatherSpec {
 
     }
 
-    static String getWeatherHistory(Context context, ModelForGSONWeatherClass weather) {
-        // Текущее время
-        Date currentDate = new Date();
-        // Форматирование времени как "день.месяц.год"
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
+    static String getWeatherHistory(Context context, ModelForGSONWeatherClass weather, Date currentDate) {
+
         // Форматирование времени как "часы:минуты:секунды"
         DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timeText = timeFormat.format(currentDate);
 
-        return dateText + context.getString(R.string.at) + timeText + context.getString(R.string.it_was) + ": " + weather.main.temp + context.getString(R.string.celsius) + "\n" + context.getString(R.string.for_wind_beggining) + weather.wind.getSpeed() + context.getString(R.string.for_wind) + "\n" + weather.weather[0].getDescription();
+        return context.getString(R.string.at) + timeText + context.getString(R.string.it_was) + ": " + weather.main.temp + context.getString(R.string.celsius) + "\n" + context.getString(R.string.for_wind_beggining) + weather.wind.getSpeed() + context.getString(R.string.for_wind) + "\n" + weather.weather[0].getDescription();
 
 
+    }
+
+    static String getDate(Context context, Date currentDate){
+        // Форматирование времени как "день.месяц.год"
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        return dateFormat.format(currentDate);
     }
 
     static String getPressure(Context context, ModelForGSONWeatherClass weather) {

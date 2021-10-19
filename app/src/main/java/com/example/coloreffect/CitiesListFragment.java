@@ -25,6 +25,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Date;
+
 
 public class CitiesListFragment extends Fragment {
 
@@ -232,6 +234,7 @@ public class CitiesListFragment extends Fragment {
                 String resultFeels = null;
                 String resultHumidity = null;
                 String iconCode = null;
+                Date currentDate = new Date();// Текущее время
                 String city = noteDataReader.getPosition(categoryId).getDescription();
                 savedCity.edit().putInt(PREVIOUS_WEATHER_ID, categoryId).apply();
                 String[] cityNamesForAPI = getResources().getStringArray(R.array.city_names_for_load_weather);
@@ -243,7 +246,8 @@ public class CitiesListFragment extends Fragment {
                 }
                 String cityForBundle = weather.getName();
                 String resultWeather = WeatherSpec.getWeather(getActivity(), categoryId, weather);
-                String resultWeatherHistory = WeatherSpec.getWeatherHistory(getActivity(), weather);
+                String resultWeatherHistory = WeatherSpec.getWeatherHistory(getActivity(), weather, currentDate);
+                String dateForHistory = WeatherSpec.getDate(getActivity(),currentDate);
                 if (checkBoxPressure.isChecked()) {
 
                     if (weather != null) {
@@ -260,7 +264,7 @@ public class CitiesListFragment extends Fragment {
                 }
 
                 iconCode = weather.weather[0].getIcon();
-                DataForBundle dataForBundle = new DataForBundle(resultPressure, resultFeels, resultHumidity, resultWeather, resultWeatherHistory, iconCode, categoryId, cityForBundle);
+                DataForBundle dataForBundle = new DataForBundle(resultPressure, resultFeels, resultHumidity, resultWeather, dateForHistory, resultWeatherHistory, iconCode, categoryId, cityForBundle);
                 citiesListListener.onListItemClick(categoryId, dataForBundle, descriptionText);
             }
         };

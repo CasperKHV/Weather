@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,6 +45,7 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
     private HistoryListListener historyListListener;
     String city;
     String history;
+    String dateForHistory;
 
     private DataForBundle dataForBundle;
     private TextView weatherText;
@@ -97,6 +99,7 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
             photoWeatherCode = dataForBundle.getIconCode();
             city = dataForBundle.getCity();
             history = dataForBundle.getHistory();
+            dateForHistory = dataForBundle.getDateForHistory();
         } else {
             throw new RuntimeException("DataForBundle is empty");
         }
@@ -179,13 +182,14 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
             getActivity().setResult(Activity.RESULT_OK, intentResult);
         }
 
-        if (city != null && history != null) {
+        if (city != null && dateForHistory != null && history != null) {
             initDataSource();
             Log.d("кол-во", Integer.toString(noteDataReaderForHistory.getCount()));
-            if (noteDataReaderForHistory.getCount() == 0) {
-                noteDataSourceForHistory.addNote(city, history);
+            Log.d("дата", dateForHistory);
+            if (noteDataReaderForHistory.getCountForAvoidRepetition(city, dateForHistory) == 0) {
+                noteDataSourceForHistory.addNote(dateForHistory, city, history);
             } else {
-                noteDataSourceForHistory.editNote(city, history);
+                noteDataSourceForHistory.editNote(dateForHistory, city, history);
             }
         }
 
@@ -312,19 +316,47 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
 
         public void bind(HistoryNote note) {
             this.note = note;
-            categoryNameTextView.setText(note.getDescription());
+            categoryNameTextView.setText(note.getDate());
         }
 
         @Override
         public void onClick(View view) {
             //showActivity(this.getLayoutPosition());
+
+            // Выведем диалоговое окно для редактирования записи
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+// alertView пригодится в дальнейшем для поиска пользовательских элементов
+            final View alertView = factory.inflate(R.layout.layout_history_description, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setView(alertView);
+//            builder.setTitle(note.getDate());
+            TextView title = new TextView(getActivity());
+// Customise your Title here
+            title.setText(note.getDate());
+            title.setBackgroundColor(Color.DKGRAY);
+            title.setPadding(10, 10, 10, 10);
+            title.setGravity(Gravity.CENTER);
+            title.setTextColor(Color.WHITE);
+            title.setTextSize(20);
+            builder.setCustomTitle(title);
+
+
+            TextView editTextNote = alertView.findViewById(R.id.textDescriptionHistory);
+
+
+
+            // Если использовать findViewById без alertView, то всегда будем получать editText = null
+            editTextNote.setText(note.getDescription());
+            builder.setNegativeButton(R.string.Close, null);
+            builder.show();
+
         }
 
         private void showPopupMenu(View view) {
 // Покажем меню на элементе
             PopupMenu popup = new PopupMenu(view.getContext(), view);
             MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.main_context_menu, popup.getMenu());
+            inflater.inflate(R.menu.context_menu_for_history, popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
                 // Обработка выбора пункта меню
@@ -332,11 +364,11 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
                 public boolean onMenuItemClick(MenuItem item) {
 // Делегируем обработку слушателю
                     switch (item.getItemId()) {
-                        case R.id.menu_edit:
-                            editElement(note);
-                            return true;
-                        case R.id.menu_delete:
+                        case R.id.menu_for_history_delete:
                             deleteElement(note);
+                            return true;
+                        case R.id.menu_for_history_delete_all:
+                            deleteHistoryForCity(city);
                             return true;
                     }
                     return false;
@@ -378,32 +410,13 @@ public class WeatherResultFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    private void editElement(HistoryNote note) {
-        // Выведем диалоговое окно для редактирования записи
-        LayoutInflater factory = LayoutInflater.from(getActivity());
-// alertView пригодится в дальнейшем для поиска пользовательских элементов
-        final View alertView = factory.inflate(R.layout.layout_add_city_note, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(alertView);
-        builder.setTitle(R.string.alert_title_add);
-        EditText editTextNote = alertView.findViewById(R.id.editTextNote);
-        EditText editTextNoteTitle = alertView.findViewById(R.id.editTextNoteTitle);
-        // Если использовать findViewById без alertView, то всегда будем получать editText = null
-        editTextNoteTitle.setText(note.getTitle());
-        editTextNote.setText(note.getDescription());
-        builder.setNegativeButton(R.string.alert_cancel, null);
-        builder.setPositiveButton(R.string.refresh_the_note, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                noteDataSourceForHistory.editNote(editTextNoteTitle.getText().toString(), editTextNote.getText().toString());
-                dataUpdated();
-            }
-        });
-        builder.show();
-    }
-
     private void deleteElement(HistoryNote note) {
         noteDataSourceForHistory.deleteNote(note);
+        dataUpdated();
+    }
+
+    private void deleteHistoryForCity(String city){
+        noteDataSourceForHistory.deleteHistoryForCity(city);
         dataUpdated();
     }
 

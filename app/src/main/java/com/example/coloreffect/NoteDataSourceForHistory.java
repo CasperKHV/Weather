@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -34,28 +35,31 @@ public class NoteDataSourceForHistory implements Closeable {
     }
 
     // Добавить новую запись
-    public HistoryNote addNote(String title, String description) {
+    public HistoryNote addNote(String date, String title, String description) {
         ContentValues values = new ContentValues();
+        values.put(DatabaseHelperForHistory.COLUMN_DATE,date);
         values.put(DatabaseHelperForHistory.COLUMN_NOTE,description);
         values.put(DatabaseHelperForHistory.COLUMN_NOTE_TITLE,title);
         // Добавление записи
         long insertId = database.insert(DatabaseHelperForHistory.TABLE_NOTES,null,values);
         HistoryNote note = new HistoryNote();
         note.setId(insertId);
+        note.setDate(date);
         note.setTitle(title);
         note.setDescription(description);
         return note;
     }
 
     // Изменить запись
-    public void editNote(String title, String description) {
+    public void editNote(String date, String title, String description) {
         ContentValues editedNote = new ContentValues();
+        editedNote.put(DatabaseHelperForHistory.COLUMN_DATE, date);
         editedNote.put(DatabaseHelperForHistory.COLUMN_NOTE, description);
         editedNote.put(DatabaseHelperForHistory.COLUMN_NOTE_TITLE,title);
         // Изменение записи
         database.update(DatabaseHelperForHistory.TABLE_NOTES,
                 editedNote,
-                DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= '" + title + "'",
+                DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= '" + title + "' AND " + DatabaseHelperForHistory.COLUMN_DATE + "= '" + date + "'",
                 null);
     }
 
@@ -65,6 +69,10 @@ public class NoteDataSourceForHistory implements Closeable {
         database.delete(DatabaseHelperForHistory.TABLE_NOTES,
                 DatabaseHelperForHistory.COLUMN_ID + "=" + id,
                 null);
+    }
+
+    public void deleteHistoryForCity(String city) {
+        database.delete(DatabaseHelperForHistory.TABLE_NOTES, DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= ?", new String[]{city});
     }
 
     // Очистить таблицу

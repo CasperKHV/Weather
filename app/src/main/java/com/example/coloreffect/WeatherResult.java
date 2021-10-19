@@ -57,22 +57,4 @@ public class WeatherResult extends AppCompatActivity {
         Log.d(TAG, "onDestroy");
         super.onDestroy();
     }
-
-
-    public void showPopup(View view) {
-        PopupMenu popup = new PopupMenu(this, view);
-        popup.inflate(R.menu.main_menu);
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Toast toast = Toast.makeText(WeatherResult.this, item.toString(), Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
-                return true;
-            }
-        });
-        popup.show();
-    }
-
 }

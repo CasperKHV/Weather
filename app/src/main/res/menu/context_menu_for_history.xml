@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/delete_this_note"
+        android:id="@+id/menu_for_history_delete"
+        android:icon="@android:drawable/ic_menu_delete"/>
+    <item
+        android:title="@string/delete_all_history"
+        android:id="@+id/menu_for_history_delete_all"
+        android:icon="@android:drawable/ic_menu_delete"/>
+
+</menu>

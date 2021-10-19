@@ -16,6 +16,7 @@ public class NoteDataReaderForHistory implements Closeable {
 
     private String[] notesAllColumn = {
             DatabaseHelperForHistory.COLUMN_ID,
+            DatabaseHelperForHistory.COLUMN_DATE,
             DatabaseHelperForHistory.COLUMN_NOTE,
             DatabaseHelperForHistory.COLUMN_NOTE_TITLE
     };
@@ -46,7 +47,14 @@ public class NoteDataReaderForHistory implements Closeable {
     // Создание запроса на курсор
     private void query(String city) {
         cursor = database.query(DatabaseHelperForHistory.TABLE_NOTES,
-                notesAllColumn, DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= ?", new String[] {city}, null, null, null);
+                notesAllColumn, DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= ?", new String[]{city}, null, null, null);
+
+    }
+
+    // Создание запроса на курсор для определения, имеются ли данные по городу на определённую дату
+    public int getCountForAvoidRepetition(String city, String date) {
+        return database.query(DatabaseHelperForHistory.TABLE_NOTES,
+                notesAllColumn, DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= ? AND " + DatabaseHelperForHistory.COLUMN_DATE + "= ?", new String[]{city, date}, null, null, null).getCount();
 
     }
 
@@ -65,8 +73,9 @@ public class NoteDataReaderForHistory implements Closeable {
     private HistoryNote cursorToNote() {
         HistoryNote note = new HistoryNote();
         note.setId(cursor.getLong(0));
-        note.setDescription(cursor.getString(1));
-        note.setTitle(cursor.getString(2));
+        note.setDate(cursor.getString(1));
+        note.setDescription(cursor.getString(2));
+        note.setTitle(cursor.getString(3));
         return note;
     }
 }
