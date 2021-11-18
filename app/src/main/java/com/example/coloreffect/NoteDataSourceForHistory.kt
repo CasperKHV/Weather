@@ -1,87 +1,94 @@
-package com.example.coloreffect;
+package com.example.coloreffect
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
-import java.io.Closeable;
-import java.io.IOException;
+import android.content.ContentValues
+import android.content.Context
+import android.database.SQLException
+import android.database.sqlite.SQLiteDatabase
+import com.example.coloreffect.DatabaseHelperForHistory
+import java.io.Closeable
+import java.io.IOException
 
 //  Источник данных, позволяет изменять данные в таблице
 // Создает и держит в себе читатель данных
-public class NoteDataSourceForHistory implements Closeable {
-    private DatabaseHelperForHistory dbHelper;
-    private SQLiteDatabase database;
-    private NoteDataReaderForHistory noteDataReaderForHistory;
+class NoteDataSourceForHistory(context: Context?) : Closeable {
 
-    public NoteDataSourceForHistory(Context context) {
-        dbHelper = new DatabaseHelperForHistory(context);
-    }
+    private val dbHelper: DatabaseHelperForHistory
+    private var database: SQLiteDatabase? = null
+
+    // Вернуть читателя (он потребуется в других местах)
+    var noteDataReaderForHistory: NoteDataReaderForHistory? = null
+        private set
 
     // Открывает базу данных
-    public void open(String city) throws SQLException {
-        database = dbHelper.getWritableDatabase();
+    @Throws(SQLException::class)
+    fun open(city: String?) {
+        database = dbHelper.writableDatabase
         // Создать читателя и открыть его
-        noteDataReaderForHistory = new NoteDataReaderForHistory(database);
-        noteDataReaderForHistory.open(city);
+        noteDataReaderForHistory = NoteDataReaderForHistory(database)
+        noteDataReaderForHistory!!.open(city)
     }
 
-    @Override
-    public void close() throws IOException {
-        noteDataReaderForHistory.close();
-        dbHelper.close();
+    @Throws(IOException::class)
+    override fun close() {
+        noteDataReaderForHistory!!.close()
+        dbHelper.close()
     }
 
     // Добавить новую запись
-    public HistoryNote addNote(String date, String title, String description) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelperForHistory.COLUMN_DATE,date);
-        values.put(DatabaseHelperForHistory.COLUMN_NOTE,description);
-        values.put(DatabaseHelperForHistory.COLUMN_NOTE_TITLE,title);
+    fun addNote(date: String?, title: String?, description: String?): HistoryNote {
+        val values = ContentValues()
+        values.put(DatabaseHelperForHistory.COLUMN_DATE, date)
+        values.put(DatabaseHelperForHistory.COLUMN_NOTE, description)
+        values.put(DatabaseHelperForHistory.COLUMN_NOTE_TITLE, title)
         // Добавление записи
-        long insertId = database.insert(DatabaseHelperForHistory.TABLE_NOTES,null,values);
-        HistoryNote note = new HistoryNote();
-        note.setId(insertId);
-        note.setDate(date);
-        note.setTitle(title);
-        note.setDescription(description);
-        return note;
+        val insertId = database!!.insert(DatabaseHelperForHistory.TABLE_NOTES, null, values)
+        val note = HistoryNote()
+        note.id = insertId
+        note.date = date
+        note.title = title
+        note.description = description
+        return note
     }
 
     // Изменить запись
-    public void editNote(String date, String title, String description) {
-        ContentValues editedNote = new ContentValues();
-        editedNote.put(DatabaseHelperForHistory.COLUMN_DATE, date);
-        editedNote.put(DatabaseHelperForHistory.COLUMN_NOTE, description);
-        editedNote.put(DatabaseHelperForHistory.COLUMN_NOTE_TITLE,title);
+    fun editNote(date: String, title: String, description: String?) {
+        val editedNote = ContentValues()
+        editedNote.put(DatabaseHelperForHistory.COLUMN_DATE, date)
+        editedNote.put(DatabaseHelperForHistory.COLUMN_NOTE, description)
+        editedNote.put(DatabaseHelperForHistory.COLUMN_NOTE_TITLE, title)
         // Изменение записи
-        database.update(DatabaseHelperForHistory.TABLE_NOTES,
-                editedNote,
-                DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= '" + title + "' AND " + DatabaseHelperForHistory.COLUMN_DATE + "= '" + date + "'",
-                null);
+        database!!.update(
+            DatabaseHelperForHistory.TABLE_NOTES,
+            editedNote,
+            DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= '" + title + "' AND " + DatabaseHelperForHistory.COLUMN_DATE + "= '" + date + "'",
+            null
+        )
     }
 
     // Удалить запись
-    public void deleteNote(HistoryNote note) {
-        long id = note.getId();
-        database.delete(DatabaseHelperForHistory.TABLE_NOTES,
-                DatabaseHelperForHistory.COLUMN_ID + "=" + id,
-                null);
+    fun deleteNote(note: HistoryNote?) {
+        val id = note!!.id
+        database!!.delete(
+            DatabaseHelperForHistory.TABLE_NOTES,
+            DatabaseHelperForHistory.COLUMN_ID + "=" + id,
+            null
+        )
     }
 
-    public void deleteHistoryForCity(String city) {
-        database.delete(DatabaseHelperForHistory.TABLE_NOTES, DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= ?", new String[]{city});
+    fun deleteHistoryForCity(city: String?) {
+        database!!.delete(
+            DatabaseHelperForHistory.TABLE_NOTES,
+            DatabaseHelperForHistory.COLUMN_NOTE_TITLE + "= ?",
+            arrayOf(city)
+        )
     }
 
     // Очистить таблицу
-    public void deleteAll() {
-        database.delete(DatabaseHelperForHistory.TABLE_NOTES, null, null);
+    fun deleteAll() {
+        database!!.delete(DatabaseHelperForHistory.TABLE_NOTES, null, null)
     }
 
-    // Вернуть читателя (он потребуется в других местах)
-    public NoteDataReaderForHistory getNoteDataReaderForHistory(){
-        return noteDataReaderForHistory;
+    init {
+        dbHelper = DatabaseHelperForHistory(context)
     }
 }

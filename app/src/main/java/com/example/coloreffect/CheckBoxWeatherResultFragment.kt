@@ -1,66 +1,53 @@
-package com.example.coloreffect;
+package com.example.coloreffect
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+class CheckBoxWeatherResultFragment : Fragment() {
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+    var pressureTextView: TextView? = null
+    var feelsTextView: TextView? = null
+    var humidityTextView: TextView? = null
+    var pressure: String? = null
+    var feels: String? = null
+    var humidity: String? = null
 
-
-public class CheckBoxWeatherResultFragment extends Fragment {
-
-    TextView pressureTextView;
-    TextView feelsTextView;
-    TextView humidityTextView;
-    String pressure;
-    String feels;
-    String humidity;
-
-    public static CheckBoxWeatherResultFragment newInstance(String pressure, String feels, String humidity) {
-        CheckBoxWeatherResultFragment fragment = new CheckBoxWeatherResultFragment();
-        fragment.pressure = pressure;
-        fragment.feels = feels;
-        fragment.humidity = humidity;
-        return fragment;
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_check_box_weather_result, container, false)
+        pressureTextView = view.findViewById(R.id.textview_pressure)
+        feelsTextView = view.findViewById(R.id.textview_feels)
+        humidityTextView = view.findViewById(R.id.textview_humidity)
+        return view
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_check_box_weather_result, container, false);
-        pressureTextView = view.findViewById(R.id.textview_pressure);
-        feelsTextView = view.findViewById(R.id.textview_feels);
-        humidityTextView = view.findViewById(R.id.textview_humidity);
-
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (pressure != null) {
-            pressureTextView.setVisibility(View.VISIBLE);
-            pressureTextView.setText(pressure);
+            pressureTextView!!.visibility = View.VISIBLE
+            pressureTextView!!.text = pressure
         }
-
         if (feels != null) {
-            feelsTextView.setVisibility(View.VISIBLE);
-            feelsTextView.setText(feels);
+            feelsTextView!!.visibility = View.VISIBLE
+            feelsTextView!!.text = feels
         }
-
         if (humidity != null) {
-            humidityTextView.setVisibility(View.VISIBLE);
-            humidityTextView.setText(humidity);
+            humidityTextView!!.visibility = View.VISIBLE
+            humidityTextView!!.text = humidity
         }
-
-
     }
 
+    companion object {
 
+        fun newInstance(pressure: String?, feels: String?, humidity: String?): CheckBoxWeatherResultFragment {
+            val fragment = CheckBoxWeatherResultFragment()
+            fragment.pressure = pressure
+            fragment.feels = feels
+            fragment.humidity = humidity
+            return fragment
+        }
+    }
 }

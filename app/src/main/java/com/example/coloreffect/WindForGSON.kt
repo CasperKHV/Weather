@@ -1,22 +1,10 @@
-package com.example.coloreffect;
+package com.example.coloreffect
 
-public class WindForGSON {
-    float speed;
-    int deg;
+class WindForGSON {
 
-    public float getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public int getDeg() {
-        return deg;
-    }
-
-    public void setDeg(int deg) {
-        this.deg = deg;
+    var speed = 0f
+    var deg = 0
+    fun setSpeed(speed: Int) {
+        this.speed = speed.toFloat()
     }
 }

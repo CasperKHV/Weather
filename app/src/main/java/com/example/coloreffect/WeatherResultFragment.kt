@@ -1,434 +1,359 @@
-package com.example.coloreffect;
+package com.example.coloreffect
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.TextView;
+import android.app.Activity
+import android.content.Intent
+import android.content.res.Resources.NotFoundException
+import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
+import android.view.ContextMenu
+import android.view.ContextMenu.ContextMenuInfo
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.coloreffect.CheckBoxWeatherResultFragment
+import com.example.coloreffect.CitiesListFragment
+import java.io.Serializable
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.Serializable;
-
-
-public class WeatherResultFragment extends Fragment implements View.OnClickListener {
-
-    private static final String INNER_FRAGMENT_TAG = "inner_fragment_tag";
+class WeatherResultFragment : Fragment(), View.OnClickListener {
 
     //блок для RecyclerView
-    private NoteDataSourceForHistory noteDataSourceForHistory;     // Источник данных
-    private NoteDataReaderForHistory noteDataReaderForHistory;      // Читатель данных
-    private MyAdapter adapter;                // Адаптер для RecyclerView
-    private HistoryListListener historyListListener;
-    String city;
-    String history;
-    String dateForHistory;
-
-    private DataForBundle dataForBundle;
-    private TextView weatherText;
-    private Button shareButton;
-    private String message;
-    private ImageView photoWeather;
-    public static final String DATA_FOR_BUNDLE = "data for bundle";
-
-    public static WeatherResultFragment newInstance(Serializable dataForBundle) {
-        WeatherResultFragment fragment = new WeatherResultFragment();
-        fragment.dataForBundle = (DataForBundle) dataForBundle;
-        return fragment;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_weather_result, container, false);
-
-        noteDataSourceForHistory = new NoteDataSourceForHistory(getActivity());
-
-        RecyclerView citiesCategoriesRecyclerView = view.findViewById(R.id.recycler_view_history);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-        citiesCategoriesRecyclerView.setLayoutManager(layoutManager);
-//        citiesCategoriesRecyclerView.setAdapter(new MyAdapter());
-
-        adapter = new MyAdapter();
-        citiesCategoriesRecyclerView.setAdapter(adapter);
+    private var noteDataSourceForHistory // Источник данных
+        : NoteDataSourceForHistory? = null
+    private var noteDataReaderForHistory // Читатель данных
+        : NoteDataReaderForHistory? = null
+    private var adapter // Адаптер для RecyclerView
+        : MyAdapter? = null
+    private val historyListListener: HistoryListListener? = null
+    var city: String? = null
+    var history: String? = null
+    var dateForHistory: String? = null
+    private var dataForBundle: DataForBundle? = null
+    private var weatherText: TextView? = null
+    private var shareButton: Button? = null
+    private var message: String? = null
+    private var photoWeather: ImageView? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_weather_result, container, false)
+        noteDataSourceForHistory = NoteDataSourceForHistory(activity)
+        val citiesCategoriesRecyclerView: RecyclerView = view.findViewById(R.id.recycler_view_history)
+        val layoutManager = LinearLayoutManager(activity)
+        layoutManager.orientation = RecyclerView.VERTICAL
+        citiesCategoriesRecyclerView.layoutManager = layoutManager
+        //        citiesCategoriesRecyclerView.setAdapter(new MyAdapter());
+        adapter = MyAdapter()
+        citiesCategoriesRecyclerView.adapter = adapter
 
 //        historyListListener.transfer(noteDataSourceForHistory, noteDataReaderForHistory, adapter);
-
-        photoWeather = view.findViewById(R.id.photoWeather);
-        weatherText = view.findViewById(R.id.textview_weather);
-        shareButton = view.findViewById(R.id.button_share);
-        shareButton.setOnClickListener(this);
-        return view;
+        photoWeather = view.findViewById(R.id.photoWeather)
+        weatherText = view.findViewById(R.id.textview_weather)
+        shareButton = view.findViewById(R.id.button_share)
+        shareButton!!.setOnClickListener(this)
+        return view
     }
 
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState != null) {
-            dataForBundle = (DataForBundle) savedInstanceState.getSerializable(DATA_FOR_BUNDLE);
+            dataForBundle = savedInstanceState.getSerializable(DATA_FOR_BUNDLE) as DataForBundle?
         }
-
-        String photoWeatherCode;
+        val photoWeatherCode: String?
         if (dataForBundle != null) {
-            message = dataForBundle.getMessage();
-            photoWeatherCode = dataForBundle.getIconCode();
-            city = dataForBundle.getCity();
-            history = dataForBundle.getHistory();
-            dateForHistory = dataForBundle.getDateForHistory();
+            message = dataForBundle!!.message
+            photoWeatherCode = dataForBundle!!.iconCode
+            city = dataForBundle!!.city
+            history = dataForBundle!!.history
+            dateForHistory = dataForBundle!!.dateForHistory
         } else {
-            throw new RuntimeException("DataForBundle is empty");
+            throw RuntimeException("DataForBundle is empty")
         }
-
         if (photoWeatherCode != null) {
-            int imageId = R.drawable.troll_weather;
-            switch (photoWeatherCode) {
-                case "01d":
-                    imageId = R.drawable.a01d;
-                    break;
-                case "01n":
-                    imageId = R.drawable.a01n;
-                    break;
-                case "02d":
-                    imageId = R.drawable.a02d;
-                    break;
-                case "02n":
-                    imageId = R.drawable.a02n;
-                    break;
-                case "03d":
-                    imageId = R.drawable.a03d;
-                    break;
-                case "03n":
-                    imageId = R.drawable.a03n;
-                    break;
-                case "04d":
-                    imageId = R.drawable.a04d;
-                    break;
-                case "04n":
-                    imageId = R.drawable.a04n;
-                    break;
-                case "09d":
-                    imageId = R.drawable.a09d;
-                    break;
-                case "09n":
-                    imageId = R.drawable.a09n;
-                    break;
-                case "10d":
-                    imageId = R.drawable.a10d;
-                    break;
-                case "10n":
-                    imageId = R.drawable.a10n;
-                    break;
-                case "11d":
-                    imageId = R.drawable.a11d;
-                    break;
-                case "11n":
-                    imageId = R.drawable.a11n;
-                    break;
-                case "13d":
-                    imageId = R.drawable.a13d;
-                    break;
-                case "13n":
-                    imageId = R.drawable.a13n;
-                    break;
-                case "50d":
-                    imageId = R.drawable.a50d;
-                    break;
-                case "50n":
-                    imageId = R.drawable.a50n;
-                    break;
-                default:
-                    break;
-
+            var imageId = R.drawable.troll_weather
+            when (photoWeatherCode) {
+                "01d" -> imageId = R.drawable.a01d
+                "01n" -> imageId = R.drawable.a01n
+                "02d" -> imageId = R.drawable.a02d
+                "02n" -> imageId = R.drawable.a02n
+                "03d" -> imageId = R.drawable.a03d
+                "03n" -> imageId = R.drawable.a03n
+                "04d" -> imageId = R.drawable.a04d
+                "04n" -> imageId = R.drawable.a04n
+                "09d" -> imageId = R.drawable.a09d
+                "09n" -> imageId = R.drawable.a09n
+                "10d" -> imageId = R.drawable.a10d
+                "10n" -> imageId = R.drawable.a10n
+                "11d" -> imageId = R.drawable.a11d
+                "11n" -> imageId = R.drawable.a11n
+                "13d" -> imageId = R.drawable.a13d
+                "13n" -> imageId = R.drawable.a13n
+                "50d" -> imageId = R.drawable.a50d
+                "50n" -> imageId = R.drawable.a50n
+                else -> {
+                }
             }
             try {
-                photoWeather.setImageResource(imageId);
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
-                photoWeather.setImageResource(R.drawable.troll_weather);
+                photoWeather!!.setImageResource(imageId)
+            } catch (e: NotFoundException) {
+                e.printStackTrace()
+                photoWeather!!.setImageResource(R.drawable.troll_weather)
             }
-            registerForContextMenu(photoWeather);
+            registerForContextMenu(photoWeather!!)
         }
-
-
         if (message != null) {
-            weatherText.setText(message);
-            Intent intentResult = new Intent();
-            intentResult.putExtra(CitiesListFragment.RESULT_OK_STRING, getResources().getString(R.string.repeat_choose_city));
-            getActivity().setResult(Activity.RESULT_OK, intentResult);
+            weatherText!!.text = message
+            val intentResult = Intent()
+            intentResult.putExtra(
+                CitiesListFragment.RESULT_OK_STRING,
+                resources.getString(R.string.repeat_choose_city)
+            )
+            requireActivity().setResult(Activity.RESULT_OK, intentResult)
         }
-
         if (city != null && dateForHistory != null && history != null) {
-            initDataSource();
-            Log.d("кол-во", Integer.toString(noteDataReaderForHistory.getCount()));
-            Log.d("дата", dateForHistory);
-            if (noteDataReaderForHistory.getCountForAvoidRepetition(city, dateForHistory) == 0) {
-                noteDataSourceForHistory.addNote(dateForHistory, city, history);
+            initDataSource()
+            Log.d("кол-во", Integer.toString(noteDataReaderForHistory!!.count))
+            Log.d("дата", dateForHistory!!)
+            if (noteDataReaderForHistory!!.getCountForAvoidRepetition(city!!, dateForHistory!!) == 0) {
+                noteDataSourceForHistory!!.addNote(dateForHistory, city, history)
             } else {
-                noteDataSourceForHistory.editNote(dateForHistory, city, history);
+                noteDataSourceForHistory!!.editNote(dateForHistory!!, city!!, history)
             }
         }
-
-        FragmentManager fragmentManager = getChildFragmentManager();
-        CheckBoxWeatherResultFragment checkBoxWeatherResultFragment = (CheckBoxWeatherResultFragment) fragmentManager.findFragmentByTag(INNER_FRAGMENT_TAG);
+        val fragmentManager = childFragmentManager
+        var checkBoxWeatherResultFragment =
+            fragmentManager.findFragmentByTag(INNER_FRAGMENT_TAG) as CheckBoxWeatherResultFragment?
         if (checkBoxWeatherResultFragment == null) {
-            String pressure = dataForBundle.getResultPressure();
-            String feels = dataForBundle.getResultFeels();
-            String humidity = dataForBundle.getResultHumidity();
+            val pressure = dataForBundle!!.resultPressure
+            val feels = dataForBundle!!.resultFeels
+            val humidity = dataForBundle!!.resultHumidity
             if (pressure != null || feels != null || humidity != null) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                checkBoxWeatherResultFragment = CheckBoxWeatherResultFragment.newInstance(pressure, feels, humidity);
-                fragmentTransaction.replace(R.id.inner_fragment_container, checkBoxWeatherResultFragment, INNER_FRAGMENT_TAG);
-                fragmentTransaction.commit();
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                checkBoxWeatherResultFragment =
+                    CheckBoxWeatherResultFragment.newInstance(pressure, feels, humidity)
+                fragmentTransaction.replace(
+                    R.id.inner_fragment_container,
+                    checkBoxWeatherResultFragment,
+                    INNER_FRAGMENT_TAG
+                )
+                fragmentTransaction.commit()
             }
         }
-
     }
 
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.button_share) {
-            Intent intentShare = new Intent(Intent.ACTION_SEND);
-            intentShare.setType("text/plain");
-
+    override fun onClick(v: View) {
+        if (v.id == R.id.button_share) {
+            val intentShare = Intent(Intent.ACTION_SEND)
+            intentShare.type = "text/plain"
             if (message != null) {
-                intentShare.putExtra(Intent.EXTRA_TEXT, message);
+                intentShare.putExtra(Intent.EXTRA_TEXT, message)
             }
-            PackageManager packageManager = getActivity().getPackageManager();
-
+            val packageManager = requireActivity().packageManager
             if (!packageManager.queryIntentActivities(intentShare, 0).isEmpty()) {
-                startActivity(intentShare);
-                shareButton.setBackgroundColor(Color.GREEN);
+                startActivity(intentShare)
+                shareButton!!.setBackgroundColor(Color.GREEN)
             } else {
-                shareButton.setBackgroundColor(Color.RED);
+                shareButton!!.setBackgroundColor(Color.RED)
             }
         }
     }
 
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val inflater = requireActivity().menuInflater
+        inflater.inflate(R.menu.context_menu, menu)
     }
 
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.context_menu_hide:
-                photoWeather.setVisibility(View.GONE);
-                return true;
-
-            case R.id.context_menu_set_background:
-                photoWeather.setBackgroundColor(Color.BLUE);
-                return true;
-
-            case R.id.context_menu_delete_background:
-                photoWeather.setBackgroundColor(Color.TRANSPARENT);
-                return true;
-
-            default:
-                return super.onContextItemSelected(item);
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.context_menu_hide -> {
+                photoWeather!!.visibility = View.GONE
+                true
+            }
+            R.id.context_menu_set_background -> {
+                photoWeather!!.setBackgroundColor(Color.BLUE)
+                true
+            }
+            R.id.context_menu_delete_background -> {
+                photoWeather!!.setBackgroundColor(Color.TRANSPARENT)
+                true
+            }
+            else -> super.onContextItemSelected(item)
         }
     }
 
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
+    override fun onSaveInstanceState(outState: Bundle) {
         if (dataForBundle != null) {
-            outState.putSerializable(DATA_FOR_BUNDLE, dataForBundle);
+            outState.putSerializable(DATA_FOR_BUNDLE, dataForBundle)
         }
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState)
     }
 
     //далее всё для Recycler View
-    interface HistoryListListener {
-        void onListItemClick(int id, DataForBundle dataForBundle, TextView descriptionText);
+    internal interface HistoryListListener {
 
-        void transfer(NoteDataSourceForHistory noteDataSourceForHistory, NoteDataReaderForHistory noteDataReaderForHistory, MyAdapter adapter);
+        fun onListItemClick(id: Int, dataForBundle: DataForBundle?, descriptionText: TextView?)
+        fun transfer(
+            noteDataSourceForHistory: NoteDataSourceForHistory?,
+            noteDataReaderForHistory: NoteDataReaderForHistory?,
+            adapter: MyAdapter?
+        )
     }
 
+    //    @Override
+    //    public void onAttach(Context context) {
+    //        try {
+    //            historyListListener = (HistoryListListener) context;
+    //        } catch (ClassCastException | NullPointerException e) {
+    //            throw new IllegalArgumentException(context.toString() + " must implement HistoryListListener");
+    //        }
+    //        super.onAttach(context);
+    //    }
+    inner class MyViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup?) :
+        RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_history, parent, false)), View.OnClickListener {
 
-//    @Override
-//    public void onAttach(Context context) {
-//        try {
-//            historyListListener = (HistoryListListener) context;
-//        } catch (ClassCastException | NullPointerException e) {
-//            throw new IllegalArgumentException(context.toString() + " must implement HistoryListListener");
-//        }
-//        super.onAttach(context);
-//    }
+        private val categoryNameTextView: TextView
+        private val photo: ImageView? = null
+        private val textNote: TextView? = null
+        private var note: HistoryNote? = null
 
-    private class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private TextView categoryNameTextView;
-        private ImageView photo;
-        private TextView textNote;
-        private HistoryNote note;
-
-        MyViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_history, parent, false));
-            itemView.setOnClickListener(this);
-            categoryNameTextView = (TextView) itemView.findViewById(R.id.item_of_history_name_text_view);
-
-// При долгом нажатии на элементе – вытащим  меню
-            categoryNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    showPopupMenu(categoryNameTextView);
-                    return true;
-                }
-            });
-            // при быстром нажатии откроем инфу о погоде в выбранном городе
-            categoryNameTextView.setOnClickListener(this);
+        //        void bind(int position) {
+        //            String category = getResources().getStringArray(R.array.cityes_selection)[position];
+        //            categoryNameTextView.setText(category);
+        //        }
+        fun bind(note: HistoryNote?) {
+            this.note = note
+            categoryNameTextView.text = note!!.date
         }
 
-
-//        void bind(int position) {
-//            String category = getResources().getStringArray(R.array.cityes_selection)[position];
-//            categoryNameTextView.setText(category);
-//        }
-
-        public void bind(HistoryNote note) {
-            this.note = note;
-            categoryNameTextView.setText(note.getDate());
-        }
-
-        @Override
-        public void onClick(View view) {
+        override fun onClick(view: View) {
             //showActivity(this.getLayoutPosition());
 
             // Выведем диалоговое окно для редактирования записи
-            LayoutInflater factory = LayoutInflater.from(getActivity());
-// alertView пригодится в дальнейшем для поиска пользовательских элементов
-            final View alertView = factory.inflate(R.layout.layout_history_description, null);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setView(alertView);
-//            builder.setTitle(note.getDate());
-            TextView title = new TextView(getActivity());
-// Customise your Title here
-            title.setText(note.getDate());
-            title.setBackgroundColor(Color.DKGRAY);
-            title.setPadding(10, 10, 10, 10);
-            title.setGravity(Gravity.CENTER);
-            title.setTextColor(Color.WHITE);
-            title.setTextSize(20);
-            builder.setCustomTitle(title);
-
-
-            TextView editTextNote = alertView.findViewById(R.id.textDescriptionHistory);
-
-
+            val factory = LayoutInflater.from(activity)
+            // alertView пригодится в дальнейшем для поиска пользовательских элементов
+            val alertView = factory.inflate(R.layout.layout_history_description, null)
+            val builder = AlertDialog.Builder(activity!!)
+            builder.setView(alertView)
+            //            builder.setTitle(note.getDate());
+            val title = TextView(activity)
+            // Customise your Title here
+            title.text = note!!.date
+            title.setBackgroundColor(Color.DKGRAY)
+            title.setPadding(10, 10, 10, 10)
+            title.gravity = Gravity.CENTER
+            title.setTextColor(Color.WHITE)
+            title.textSize = 20f
+            builder.setCustomTitle(title)
+            val editTextNote = alertView.findViewById<TextView>(R.id.textDescriptionHistory)
 
             // Если использовать findViewById без alertView, то всегда будем получать editText = null
-            editTextNote.setText(note.getDescription());
-            builder.setNegativeButton(R.string.Close, null);
-            builder.show();
-
+            editTextNote.text = note!!.description
+            builder.setNegativeButton(R.string.Close, null)
+            builder.show()
         }
 
-        private void showPopupMenu(View view) {
+        private fun showPopupMenu(view: View) {
 // Покажем меню на элементе
-            PopupMenu popup = new PopupMenu(view.getContext(), view);
-            MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.context_menu_for_history, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
+            val popup = PopupMenu(view.context, view)
+            val inflater = popup.menuInflater
+            inflater.inflate(R.menu.context_menu_for_history, popup.menu)
+            popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                 // Обработка выбора пункта меню
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-// Делегируем обработку слушателю
-                    switch (item.getItemId()) {
-                        case R.id.menu_for_history_delete:
-                            deleteElement(note);
-                            return true;
-                        case R.id.menu_for_history_delete_all:
-                            deleteHistoryForCity(city);
-                            return true;
+                // Делегируем обработку слушателю
+                when (item.itemId) {
+                    R.id.menu_for_history_delete -> {
+                        deleteElement(note)
+                        return@OnMenuItemClickListener true
                     }
-                    return false;
+                    R.id.menu_for_history_delete_all -> {
+                        deleteHistoryForCity(city)
+                        return@OnMenuItemClickListener true
+                    }
                 }
-            });
-            popup.show();
+                false
+            })
+            popup.show()
+        }
+
+        init {
+            itemView.setOnClickListener(this)
+            categoryNameTextView = itemView.findViewById<View>(R.id.item_of_history_name_text_view) as TextView
+
+// При долгом нажатии на элементе – вытащим  меню
+            categoryNameTextView.setOnLongClickListener {
+                showPopupMenu(categoryNameTextView)
+                true
+            }
+            // при быстром нажатии откроем инфу о погоде в выбранном городе
+            categoryNameTextView.setOnClickListener(this)
         }
     }
 
-    public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    inner class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
 
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new MyViewHolder(inflater, parent);
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            return MyViewHolder(inflater, parent)
         }
 
-//        @Override
-//        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//// Создаем новый элемент пользовательского интерфейса
-//// Через Inflater
-//            View v = LayoutInflater.from(parent.getContext())
-//                    .inflate(R.layout.category_list_item, parent, false);
-//// Здесь можно установить всякие параметры
-//            MyViewHolder vh = new MyViewHolder(inf);
-//            return vh;
-//        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        //        @Override
+        //        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //// Создаем новый элемент пользовательского интерфейса
+        //// Через Inflater
+        //            View v = LayoutInflater.from(parent.getContext())
+        //                    .inflate(R.layout.category_list_item, parent, false);
+        //// Здесь можно установить всякие параметры
+        //            MyViewHolder vh = new MyViewHolder(inf);
+        //            return vh;
+        //        }
+        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 //            holder.bind(position);
-            holder.bind(noteDataReaderForHistory.getPosition(position));
+            holder.bind(noteDataReaderForHistory!!.getPosition(position))
         }
 
-        @Override
-        public int getItemCount() {
+        override fun getItemCount(): Int {
 //            return getResources().getStringArray(R.array.cityes_selection).length;
-            return noteDataReaderForHistory.getCount();
+            return noteDataReaderForHistory!!.count
         }
     }
 
-    private void deleteElement(HistoryNote note) {
-        noteDataSourceForHistory.deleteNote(note);
-        dataUpdated();
+    private fun deleteElement(note: HistoryNote?) {
+        noteDataSourceForHistory!!.deleteNote(note)
+        dataUpdated()
     }
 
-    private void deleteHistoryForCity(String city){
-        noteDataSourceForHistory.deleteHistoryForCity(city);
-        dataUpdated();
+    private fun deleteHistoryForCity(city: String?) {
+        noteDataSourceForHistory!!.deleteHistoryForCity(city)
+        dataUpdated()
     }
 
-    private void dataUpdated() {
-        noteDataReaderForHistory.Refresh(city);
-        adapter.notifyDataSetChanged();
+    private fun dataUpdated() {
+        noteDataReaderForHistory!!.Refresh(city)
+        adapter!!.notifyDataSetChanged()
     }
 
-    private void initDataSource() {
-        noteDataSourceForHistory.open(city);
-        noteDataReaderForHistory = noteDataSourceForHistory.getNoteDataReaderForHistory();
+    private fun initDataSource() {
+        noteDataSourceForHistory!!.open(city)
+        noteDataReaderForHistory = noteDataSourceForHistory!!.noteDataReaderForHistory
     }
 
+    companion object {
 
+        private const val INNER_FRAGMENT_TAG = "inner_fragment_tag"
+        const val DATA_FOR_BUNDLE = "data for bundle"
+        fun newInstance(dataForBundle: Serializable?): WeatherResultFragment {
+            val fragment = WeatherResultFragment()
+            fragment.dataForBundle = dataForBundle as DataForBundle?
+            return fragment
+        }
+    }
 }

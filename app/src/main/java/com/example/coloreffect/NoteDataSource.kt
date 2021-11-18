@@ -1,81 +1,84 @@
-package com.example.coloreffect;
+package com.example.coloreffect
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-
-import java.io.Closeable;
-import java.io.IOException;
+import android.content.ContentValues
+import android.content.Context
+import android.database.SQLException
+import android.database.sqlite.SQLiteDatabase
+import com.example.coloreffect.DatabaseHelper
+import java.io.Closeable
+import java.io.IOException
 
 //  Источник данных, позволяет изменять данные в таблице
 // Создает и держит в себе читатель данных
-public class NoteDataSource implements Closeable {
-    private DatabaseHelper dbHelper;
-    private SQLiteDatabase database;
-    private NoteDataReader noteDataReader;
+class NoteDataSource(context: Context?) : Closeable {
 
-    public NoteDataSource(Context context) {
-        dbHelper = new DatabaseHelper(context);
-    }
+    private val dbHelper: DatabaseHelper
+    private var database: SQLiteDatabase? = null
+
+    // Вернуть читателя (он потребуется в других местах)
+    var noteDataReader: NoteDataReader? = null
+        private set
 
     // Открывает базу данных
-    public void open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
+    @Throws(SQLException::class)
+    fun open() {
+        database = dbHelper.writableDatabase
         // Создать читателя и открыть его
-        noteDataReader = new NoteDataReader(database);
-        noteDataReader.open();
+        noteDataReader = NoteDataReader(database)
+        noteDataReader!!.open()
     }
 
-    @Override
-    public void close() throws IOException {
-        noteDataReader.close();
-        dbHelper.close();
+    @Throws(IOException::class)
+    override fun close() {
+        noteDataReader!!.close()
+        dbHelper.close()
     }
 
     // Добавить новую запись
-    public CityNote addNote(String title, String description) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_NOTE,description);
-        values.put(DatabaseHelper.COLUMN_NOTE_TITLE,title);
+    fun addNote(title: String?, description: String?): CityNote {
+        val values = ContentValues()
+        values.put(DatabaseHelper.COLUMN_NOTE, description)
+        values.put(DatabaseHelper.COLUMN_NOTE_TITLE, title)
         // Добавление записи
-        long insertId = database.insert(DatabaseHelper.TABLE_NOTES,null,values);
-        CityNote note = new CityNote();
-        note.setId(insertId);
-        note.setTitle(title);
-        note.setDescription(description);
-        return note;
+        val insertId = database!!.insert(DatabaseHelper.TABLE_NOTES, null, values)
+        val note = CityNote()
+        note.id = insertId
+        note.title = title
+        note.description = description
+        return note
     }
 
     // Изменить запись
-    public void editNote(CityNote note, String title, String description) {
-        ContentValues editedNote = new ContentValues();
-        editedNote.put(DatabaseHelper.COLUMN_ID, note.getId());
-        editedNote.put(DatabaseHelper.COLUMN_NOTE, description);
-        editedNote.put(DatabaseHelper.COLUMN_NOTE_TITLE,title);
+    fun editNote(note: CityNote?, title: String?, description: String?) {
+        val editedNote = ContentValues()
+        editedNote.put(DatabaseHelper.COLUMN_ID, note!!.id)
+        editedNote.put(DatabaseHelper.COLUMN_NOTE, description)
+        editedNote.put(DatabaseHelper.COLUMN_NOTE_TITLE, title)
         // Изменение записи
-        database.update(DatabaseHelper.TABLE_NOTES,
-                editedNote,
-                DatabaseHelper.COLUMN_ID + "=" + note.getId(),
-                null);
+        database!!.update(
+            DatabaseHelper.TABLE_NOTES,
+            editedNote,
+            DatabaseHelper.COLUMN_ID + "=" + note.id,
+            null
+        )
     }
 
     // Удалить запись
-    public void deleteNote(CityNote note) {
-        long id = note.getId();
-        database.delete(DatabaseHelper.TABLE_NOTES,
-                DatabaseHelper.COLUMN_ID + "=" + id,
-                null);
+    fun deleteNote(note: CityNote?) {
+        val id = note!!.id
+        database!!.delete(
+            DatabaseHelper.TABLE_NOTES,
+            DatabaseHelper.COLUMN_ID + "=" + id,
+            null
+        )
     }
 
     // Очистить таблицу
-    public void deleteAll() {
-        database.delete(DatabaseHelper.TABLE_NOTES, null, null);
+    fun deleteAll() {
+        database!!.delete(DatabaseHelper.TABLE_NOTES, null, null)
     }
 
-    // Вернуть читателя (он потребуется в других местах)
-    public NoteDataReader getNoteDataReader(){
-        return noteDataReader;
+    init {
+        dbHelper = DatabaseHelper(context)
     }
-
 }

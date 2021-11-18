@@ -1,57 +1,54 @@
-package com.example.coloreffect;
+package com.example.coloreffect
 
-import android.content.Context;
+import android.content.Context
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+internal object WeatherSpec {
 
-final class WeatherSpec {
-
-    private WeatherSpec() {
+    fun getWeather(context: Context?, position: Int, weather: ModelForGSONWeatherClass): String {
+        return """
+               ${context!!.getString(R.string.now_in)}${weather.name}": ${weather.main!!.temp}${context.getString(R.string.celsius)}
+               ${context.getString(R.string.for_wind_beggining)}${weather.wind!!.speed}${context.getString(R.string.for_wind)}
+               ${weather.weather[0]!!.description}
+               """.trimIndent()
     }
 
-    static String getWeather(Context context, int position, ModelForGSONWeatherClass weather) {
-        return context.getString(R.string.now_in) + weather.getName() + "\": " + weather.main.temp + context.getString(R.string.celsius) + "\n" + context.getString(R.string.for_wind_beggining) + weather.wind.getSpeed() + context.getString(R.string.for_wind) + "\n" + weather.weather[0].getDescription();
-
-
-    }
-
-    static String getWeatherHistory(Context context, ModelForGSONWeatherClass weather, Date currentDate) {
+    fun getWeatherHistory(context: Context?, weather: ModelForGSONWeatherClass, currentDate: Date?): String {
 
         // Форматирование времени как "часы:минуты:секунды"
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
-
-        return context.getString(R.string.at) + timeText + context.getString(R.string.it_was) + ": " + weather.main.temp + context.getString(R.string.celsius) + "\n" + context.getString(R.string.for_wind_beggining) + weather.wind.getSpeed() + context.getString(R.string.for_wind) + "\n" + weather.weather[0].getDescription();
-
-
+        val timeFormat: DateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val timeText = timeFormat.format(currentDate)
+        return """
+               ${context!!.getString(R.string.at)}$timeText${context.getString(R.string.it_was)}: ${weather.main!!.temp}${
+            context.getString(
+                R.string.celsius
+            )
+        }
+               ${context.getString(R.string.for_wind_beggining)}${weather.wind!!.speed}${context.getString(R.string.for_wind)}
+               ${weather.weather[0]!!.description}
+               """.trimIndent()
     }
 
-    static String getDate(Context context, Date currentDate){
+    fun getDate(context: Context?, currentDate: Date?): String {
         // Форматирование времени как "день.месяц.год"
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        return dateFormat.format(currentDate);
+        val dateFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        return dateFormat.format(currentDate)
     }
 
-    static String getPressure(Context context, ModelForGSONWeatherClass weather) {
-        return String.valueOf(Math.round(weather.main.getPressure() / 1.333333333333)) + context.getString(R.string.mm_hg);
-
-
+    fun getPressure(context: Context?, weather: ModelForGSONWeatherClass): String {
+        return Math.round(weather.main!!.pressure / 1.333333333333).toString() + context!!.getString(R.string.mm_hg)
     }
 
-    static String getFeels(Context context, ModelForGSONWeatherClass weather) {
-        return context.getString(R.string.for_feels_beggining) + String.valueOf(weather.main.getFeels_like()) + context.getString(R.string.celsius);
-
-
+    fun getFeels(context: Context?, weather: ModelForGSONWeatherClass): String {
+        return context!!.getString(R.string.for_feels_beggining) + weather.main!!.feels_like
+            .toString() + context.getString(R.string.celsius)
     }
 
-    static String getHumidity(Context context, ModelForGSONWeatherClass weather) {
-        return context.getString(R.string.humidity) + String.valueOf(weather.main.getHumidity()) + context.getString(R.string.percent);
-
-
+    fun getHumidity(context: Context?, weather: ModelForGSONWeatherClass): String {
+        return context!!.getString(R.string.humidity) + weather.main!!.humidity
+            .toString() + context.getString(R.string.percent)
     }
-
-
 }
