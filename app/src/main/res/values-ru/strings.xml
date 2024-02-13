@@ -38,8 +38,8 @@
     <string name="toast_file_deleted">Файл удалён</string>
     <string name="toast_file_not_exist">Файл не существует</string>
     <string name="show_image_from_internet">ПОКАЗАТЬ КАРТИНКУ ИЗ ИНТЕРНЕТА</string>
-    <string name="city_add_layout">City</string>
-    <string name="city_for_gson_add_layout">City for GSON</string>
+    <string name="city_add_layout">Город</string>
+    <string name="city_for_gson_add_layout">Название города для GSON</string>
     <string name="delete_main_context_menu">Удалить город</string>
     <string name="edit_main_context_menu">Редактировать</string>
     <string name="main_menu_add_a_note">Добавить город</string>
@@ -49,6 +49,11 @@
     <string name="menu_add">Добавить город</string>
     <string name="now_in">Сейчас в городе \"</string>
     <string name="refresh_the_note">Обновить запись</string>
+    <string name="it_was">\ было</string>
+    <string name="at">\ в \</string>
+    <string name="Close">Закрыть</string>
+    <string name="delete_this_note">Удалить эту запись</string>
+    <string name="delete_all_history">Удалить всю историю</string>
 
     <string-array name="cityes_selection">
         <item>Хабаровск</item>
