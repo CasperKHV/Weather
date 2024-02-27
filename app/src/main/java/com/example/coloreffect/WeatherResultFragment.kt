@@ -157,7 +157,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         if (city != null && dateForHistory != null && history != null) {
             initDataSource()
             Log.d("кол-во", Integer.toString(noteDataReaderForHistory!!.count))
-            Log.d("дата", dateForHistory)
+            Log.d("дата", dateForHistory!!)
             if (noteDataReaderForHistory!!.getCountForAvoidRepetition(
                     city!!,
                     dateForHistory!!
