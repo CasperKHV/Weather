@@ -7,3 +7,5 @@
 /captures
 .externalNativeBuild
 .cxx
+_windows
+/app/build
