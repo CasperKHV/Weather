@@ -53,6 +53,8 @@ import android.view.ContextMenu.ContextMenuInfo
 import androidx.appcompat.app.AlertDialog
 import com.example.coloreffect.HistoryNote
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.Navigation
 import com.example.coloreffect.DatabaseHelperForHistory
 import com.example.coloreffect.MainForGSON
@@ -85,6 +87,8 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration!!)
         NavigationUI.setupWithNavController(navigationView, navController)
+        val viewModel:WeatherViewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
+        Log.d(TAG,"OnCreate after WeatherViewModel`s joining")
     }
 
     override fun onStart() {
