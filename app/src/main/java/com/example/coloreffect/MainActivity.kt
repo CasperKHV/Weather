@@ -131,10 +131,12 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
                 addElement()
                 true
             }
+
             R.id.menu_clear -> {
                 clearList()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
