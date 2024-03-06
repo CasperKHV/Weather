@@ -198,8 +198,6 @@ class FragmentForNV : Fragment() {
         }
 
     private fun showLog(toastMessage: CharSequence) {
-//        Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-//        toast.show();
         Log.d("File", toastMessage.toString())
     }
 
