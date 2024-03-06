@@ -175,7 +175,7 @@ class FragmentForNV : Fragment() {
         delete!!.setOnClickListener(View.OnClickListener { deleteFile() })
         imageFromInternet = view.findViewById(R.id.imageFromInternet)
         showImageFromInternet = view.findViewById(R.id.showImageFromInternet)
-        showImageFromInternet!!.setOnClickListener(View.OnClickListener { v -> showImageFromInternet(v) })
+        showImageFromInternet?.setOnClickListener(::showImageFromInternet)
     }
 
     // проверим доступен ли external storage для записи/чтения
