@@ -80,6 +80,7 @@ class FragmentForNV : Fragment() {
         object : Thread() {
             override fun run() {
                 if (!isExternalStorageWritable) {
+                    Log.d("File", getString(R.string.toast_external_storage_not_found))
                     showLog(getText(R.string.toast_external_storage_not_found))
                     return
                 }
