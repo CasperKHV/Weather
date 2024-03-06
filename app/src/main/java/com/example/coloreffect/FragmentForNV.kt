@@ -54,8 +54,8 @@ import com.example.coloreffect.MainForGSON
 import com.example.coloreffect.WeatherForGSON
 import com.example.coloreffect.WindForGSON
 import java.io.BufferedReader
-import java.io.File
 import java.io.FileOutputStream
+import java.io.File
 import java.io.FileReader
 import java.lang.Exception
 import java.lang.StringBuilder
