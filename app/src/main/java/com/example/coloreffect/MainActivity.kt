@@ -60,6 +60,7 @@ import com.example.coloreffect.WeatherForGSON
 import com.example.coloreffect.WindForGSON
 
 class MainActivity : AppCompatActivity(), CitiesListListener {
+    private val drawer by bindView<DrawerLayout>(R.id.drawer_layout)
     private var descriptionText: TextView? = null
     private var mAppBarConfiguration: AppBarConfiguration? = null
     private var notesDataSource // Источник данных
@@ -75,7 +76,6 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         mAppBarConfiguration = AppBarConfiguration.Builder(
             R.id.nav_list_fragment, R.id.nav_fragment_for_n_v
@@ -209,7 +209,6 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
