@@ -1,6 +1,5 @@
 package com.example.coloreffect
 
-//import com.example.coloreffect.Controller.start
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

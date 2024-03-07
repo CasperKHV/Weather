@@ -1,6 +1,5 @@
 package com.example.coloreffect
 
-//import com.example.coloreffect.Controller.start
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Resources.NotFoundException

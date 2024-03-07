@@ -1,6 +1,5 @@
 package com.example.coloreffect
 
-//import com.example.coloreffect.Controller.start
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity

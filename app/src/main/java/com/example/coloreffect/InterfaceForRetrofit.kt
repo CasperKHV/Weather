@@ -1,6 +1,5 @@
 package com.example.coloreffect
 
-//import com.example.coloreffect.Controller.start
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

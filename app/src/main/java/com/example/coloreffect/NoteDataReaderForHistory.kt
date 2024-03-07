@@ -1,6 +1,5 @@
 package com.example.coloreffect
 
-//import com.example.coloreffect.Controller.start
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import java.io.Closeable
