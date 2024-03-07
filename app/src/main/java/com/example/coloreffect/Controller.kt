@@ -50,7 +50,7 @@ class Controller : Callback<ModelForGSONWeatherClass?> {
         Log.d("code", response.code().toString())
         if (response.isSuccessful && response.body() != null) {
             weather = response.body()
-            Log.d("BASE", weather?.base ?: "null")
+            Log.d("Base", weather?.base.toString())
             Log.d("Pressure", weather!!.main?.pressure.toString())
             Log.d("main", weather!!.weather[0]?.main.toString())
         }

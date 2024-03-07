@@ -12,8 +12,8 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import java.io.BufferedReader
-import java.io.File
 import java.io.FileOutputStream
+import java.io.File
 import java.io.FileReader
 
 class FragmentForNV : Fragment() {
@@ -36,6 +36,7 @@ class FragmentForNV : Fragment() {
         object : Thread() {
             override fun run() {
                 if (!isExternalStorageWritable) {
+                    Log.d("File", getString(R.string.toast_external_storage_not_found))
                     showLog(getText(R.string.toast_external_storage_not_found))
                     return
                 }
@@ -131,11 +132,7 @@ class FragmentForNV : Fragment() {
         delete!!.setOnClickListener(View.OnClickListener { deleteFile() })
         imageFromInternet = view.findViewById(R.id.imageFromInternet)
         showImageFromInternet = view.findViewById(R.id.showImageFromInternet)
-        showImageFromInternet!!.setOnClickListener(View.OnClickListener { v ->
-            showImageFromInternet(
-                v
-            )
-        })
+        showImageFromInternet?.setOnClickListener(::showImageFromInternet)
     }
 
     // проверим доступен ли external storage для записи/чтения
@@ -158,8 +155,6 @@ class FragmentForNV : Fragment() {
         }
 
     private fun showLog(toastMessage: CharSequence) {
-//        Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-//        toast.show();
         Log.d("File", toastMessage.toString())
     }
 
