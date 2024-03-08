@@ -8,14 +8,13 @@ import kotlin.reflect.KProperty
 
 internal class BindViewDelegate<T : View>(
     private val rootView: View,
-    @IdRes val id: Int,
+    @IdRes private val id: Int,
 ) {
 
     private var view: T? = null
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
         if (view == null) {
-
             if (rootView.id == id) {
                 @Suppress("UNCHECKED_CAST")
                 view = rootView as T
