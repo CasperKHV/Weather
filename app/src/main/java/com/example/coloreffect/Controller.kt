@@ -2,15 +2,12 @@ package com.example.coloreffect
 
 import android.content.Context
 import android.util.Log
-import com.example.coloreffect.ModelForGSONWeatherClass
 import com.google.gson.Gson
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import com.example.coloreffect.InterfaceForRetrofit
-import com.example.coloreffect.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 class Controller : Callback<ModelForGSONWeatherClass?> {
