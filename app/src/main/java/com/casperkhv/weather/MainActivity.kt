@@ -1,4 +1,4 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,8 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import com.example.coloreffect.CitiesListFragment.CitiesListListener
-import com.example.coloreffect.WeatherResult
+import com.casperkhv.weather.CitiesListFragment.CitiesListListener
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), CitiesListListener {

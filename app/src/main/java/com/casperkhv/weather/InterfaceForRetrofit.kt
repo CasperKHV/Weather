@@ -1,4 +1,4 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
 import retrofit2.Call
 import retrofit2.http.GET
