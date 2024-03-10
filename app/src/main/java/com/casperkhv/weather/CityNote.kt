@@ -1,4 +1,4 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
 // Класс-отражение строк из таблицы
 class CityNote {

@@ -1,4 +1,4 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
