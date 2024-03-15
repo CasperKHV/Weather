@@ -1,4 +1,4 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
 class WindForGSON {
     var speed = 0f

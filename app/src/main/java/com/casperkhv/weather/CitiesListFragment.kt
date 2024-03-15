@@ -1,4 +1,4 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
 import android.content.Context
 import android.content.SharedPreferences

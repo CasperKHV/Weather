@@ -1,4 +1,4 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
 class ModelForGSONWeatherClass {
     var base: String? = null
