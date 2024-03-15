@@ -17,7 +17,7 @@ import java.io.File
 import java.io.FileReader
 
 class FragmentForNV : Fragment() {
-    var messageForFile: EditText? = null
+    private val messageForFile by bindView<EditText>(R.id.edit_text_for_NV)
     var save: Button? = null
     var load: Button? = null
     var delete: Button? = null
@@ -50,7 +50,7 @@ class FragmentForNV : Fragment() {
 
 //                File file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), NAME_OF_FILE);
                 val file = File(activity!!.filesDir, NAME_OF_FILE)
-                val message = messageForFile!!.text.toString()
+                val message = messageForFile.text.toString()
                 if (!message.isEmpty()) {
                     try {
                         val outputStream = FileOutputStream(file, false)
@@ -93,7 +93,7 @@ class FragmentForNV : Fragment() {
                     // последний добавленный перенос лишний, убираем его
                     text.deleteCharAt(text.length - 1)
                     br.close()
-                    messageForFile!!.setText(text)
+                    messageForFile.setText(text)
                 } catch (e: Exception) {
                     showLog(e.toString())
                 }
@@ -114,7 +114,7 @@ class FragmentForNV : Fragment() {
                     } else {
                         showLog(getString(R.string.toast_file_not_exist))
                     }
-                    messageForFile!!.setText("")
+                    messageForFile.setText("")
                 } catch (e: Exception) {
                     showLog(e.toString())
                 }
@@ -123,7 +123,6 @@ class FragmentForNV : Fragment() {
     }
 
     private fun initializeViews(view: View) {
-        messageForFile = view.findViewById(R.id.edit_text_for_NV)
         save = view.findViewById(R.id.buttonSavePrivate)
         save!!.setOnClickListener(View.OnClickListener { saveFile() })
         load = view.findViewById(R.id.buttonLoadPrivate)
