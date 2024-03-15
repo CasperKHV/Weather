@@ -1,56 +1,11 @@
-package com.example.coloreffect
+package com.casperkhv.weather
 
-//import com.example.coloreffect.Controller.start
-import com.example.coloreffect.NoteDataReader
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coloreffect.R
-import com.example.coloreffect.CityNote
-import com.example.coloreffect.ModelForGSONWeatherClass
-import androidx.appcompat.app.AppCompatActivity
-import com.example.coloreffect.CitiesListFragment.CitiesListListener
-import androidx.navigation.ui.AppBarConfiguration
-import com.example.coloreffect.NoteDataSource
-import android.os.Bundle
-import com.example.coloreffect.MainActivity
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.NavController
-import androidx.navigation.ui.NavigationUI
-import com.example.coloreffect.DataForBundle
-import com.example.coloreffect.WeatherResultFragment
-import android.content.Intent
-import com.example.coloreffect.WeatherResult
-import com.example.coloreffect.CitiesListFragment
-import android.content.SharedPreferences
-import android.content.DialogInterface
-import androidx.core.view.GravityCompat
-import com.example.coloreffect.FragmentForNV
-import android.os.Environment
-import com.bumptech.glide.Glide
-import android.database.sqlite.SQLiteOpenHelper
-import com.example.coloreffect.DatabaseHelper
-import android.database.sqlite.SQLiteDatabase
-import kotlin.Throws
-import android.content.ContentValues
-import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.View.OnLongClickListener
-import com.example.coloreffect.WeatherSpec
-import retrofit2.http.GET
-import com.example.coloreffect.NoteDataSourceForHistory
-import com.example.coloreffect.NoteDataReaderForHistory
-import com.example.coloreffect.WeatherResultFragment.HistoryListListener
-import android.content.res.Resources.NotFoundException
-import android.app.Activity
-import com.example.coloreffect.CheckBoxWeatherResultFragment
-import android.content.pm.PackageManager
-import android.view.*
-import android.view.ContextMenu.ContextMenuInfo
-import com.example.coloreffect.HistoryNote
-import android.widget.*
-import com.example.coloreffect.DatabaseHelperForHistory
-import com.example.coloreffect.MainForGSON
-import com.example.coloreffect.WeatherForGSON
-import com.example.coloreffect.WindForGSON
 
 class MyAdapter(  // Здесь нам нужен только читатель данных
     private val noteDataReader: NoteDataReader
@@ -114,6 +69,7 @@ class MyAdapter(  // Здесь нам нужен только читатель 
                         itemMenuClickListener!!.onItemEditClick(note)
                         return@OnMenuItemClickListener true
                     }
+
                     R.id.menu_delete -> {
                         itemMenuClickListener!!.onItemDeleteClick(note)
                         return@OnMenuItemClickListener true
