@@ -15,9 +15,9 @@ class CheckBoxWeatherResultFragment : Fragment() {
     var feels: String? = null
     var humidity: String? = null
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_check_box_weather_result, container, false)
         pressureTextView = view.findViewById(R.id.textview_pressure)
@@ -44,9 +44,9 @@ class CheckBoxWeatherResultFragment : Fragment() {
 
     companion object {
         fun newInstance(
-            pressure: String?,
-            feels: String?,
-            humidity: String?
+                pressure: String?,
+                feels: String?,
+                humidity: String?
         ): CheckBoxWeatherResultFragment {
             val fragment = CheckBoxWeatherResultFragment()
             fragment.pressure = pressure

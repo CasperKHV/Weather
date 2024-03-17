@@ -8,8 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <!--Этот слой app_bar_main с include обязательно должен быть в самом верху
-    include в XML по принципу работы похож на import в джаве -->
     <include
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"

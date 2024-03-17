@@ -25,11 +25,11 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     private val drawer by bindView<DrawerLayout>(R.id.drawer_layout)
     private var descriptionText: TextView? = null
     private var mAppBarConfiguration: AppBarConfiguration? = null
-    private var notesDataSource // Источник данных
+    private var notesDataSource
             : NoteDataSource? = null
-    private var noteDataReader // Читатель данных
+    private var noteDataReader
             : NoteDataReader? = null
-    private var adapter // Адаптер для RecyclerView
+    private var adapterRV
             : CitiesListFragment.MyAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         setSupportActionBar(toolbar)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         mAppBarConfiguration = AppBarConfiguration.Builder(
-            R.id.nav_list_fragment, R.id.nav_fragment_for_n_v
+                R.id.nav_list_fragment, R.id.nav_fragment_for_n_v
         )
-            .setDrawerLayout(drawer)
-            .build()
+                .setDrawerLayout(drawer)
+                .build()
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration!!)
         NavigationUI.setupWithNavController(navigationView, navController)
@@ -77,15 +77,15 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     }
 
     override fun onListItemClick(
-        id: Int,
-        dataForBundle: DataForBundle?,
-        descriptionText: TextView?
+            id: Int,
+            dataForBundle: DataForBundle?,
+            descriptionText: TextView?
     ) {
         this.descriptionText = descriptionText
         val fragmentContainer = findViewById<View>(R.id.fragment_container_land)
         if (fragmentContainer != null) {
             val weatherResultFragment: WeatherResultFragment =
-                WeatherResultFragment.Companion.newInstance(dataForBundle)
+                    WeatherResultFragment.Companion.newInstance(dataForBundle)
             val transaction = supportFragmentManager.beginTransaction()
             transaction.addToBackStack(null)
             transaction.replace(R.id.fragment_container_land, weatherResultFragment)
@@ -98,13 +98,13 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     }
 
     override fun transfer(
-        notesDataSourceNoteDataSource: NoteDataSource?,
-        noteDataReader: NoteDataReader?,
-        adapter: CitiesListFragment.MyAdapter?
+            notesDataSourceNoteDataSource: NoteDataSource?,
+            noteDataReader: NoteDataReader?,
+            adapter: CitiesListFragment.MyAdapter?
     ) {
         notesDataSource = notesDataSourceNoteDataSource
         this.noteDataReader = noteDataReader
-        this.adapter = adapter
+        this.adapterRV = adapter
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -112,12 +112,12 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         if (descriptionText != null) {
             if (requestCode == CitiesListFragment.Companion.REQUEST_CODE && data != null) {
                 descriptionText!!.text =
-                    data.getStringExtra(CitiesListFragment.Companion.RESULT_OK_STRING)
+                        data.getStringExtra(CitiesListFragment.Companion.RESULT_OK_STRING)
             }
             val sharedPreferences =
-                getSharedPreferences(CitiesListFragment.Companion.SAVED_CITY, MODE_PRIVATE)
+                    getSharedPreferences(CitiesListFragment.Companion.SAVED_CITY, MODE_PRIVATE)
             sharedPreferences.edit().putInt(CitiesListFragment.Companion.PREVIOUS_WEATHER_ID, -1)
-                .apply()
+                    .apply()
         }
     }
 
@@ -148,9 +148,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     }
 
     private fun addElement() {
-// Выведем диалоговое окно для ввода новой записи
         val factory = LayoutInflater.from(this)
-        // alertView пригодится в дальнейшем для поиска пользовательских элементов
         val alertView = factory.inflate(R.layout.layout_add_city_note, null)
         val builder = AlertDialog.Builder(this)
         builder.setView(alertView)
@@ -159,10 +157,9 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         builder.setPositiveButton(R.string.menu_add) { dialog, id ->
             val editTextNote = alertView.findViewById<EditText>(R.id.editTextNote)
             val editTextNoteTitle = alertView.findViewById<EditText>(R.id.editTextNoteTitle)
-            // Если использовать findViewById без alertView, то всегда будем получать editText = null
             notesDataSource!!.addNote(
-                editTextNoteTitle.text.toString(),
-                editTextNote.text.toString()
+                    editTextNoteTitle.text.toString(),
+                    editTextNote.text.toString()
             )
             dataUpdated()
         }
@@ -171,7 +168,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
 
     private fun dataUpdated() {
         noteDataReader!!.Refresh()
-        adapter!!.notifyDataSetChanged()
+        adapterRV!!.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {

@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import kotlin.reflect.KProperty
 
 internal class BindViewDelegate<T : View>(
-    private val rootView: View,
-    @IdRes private val id: Int,
+        private val rootView: View,
+        @IdRes private val id: Int,
 ) {
 
     private var view: T? = null
@@ -29,8 +29,8 @@ internal class BindViewDelegate<T : View>(
 
 internal fun <T : View> Fragment.bindView(@IdRes id: Int): BindViewDelegate<T> {
     return BindViewDelegate(
-        rootView = requireView(),
-        id = id,
+            rootView = requireView(),
+            id = id,
     )
 }
 

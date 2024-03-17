@@ -1,6 +1,5 @@
 package com.casperkhv.weather
 
-// Класс-отражение строк из таблицы
 class CityNote {
     var id: Long = 0
     var title: String? = null

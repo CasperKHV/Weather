@@ -15,17 +15,17 @@ class Controller : Callback<ModelForGSONWeatherClass?> {
     fun start(context: Context, city: String?): ModelForGSONWeatherClass? {
         val gson = Gson()
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
         val interfaceForRetrofit = retrofit.create(
-            InterfaceForRetrofit::class.java
+                InterfaceForRetrofit::class.java
         )
         val call = interfaceForRetrofit.loadWeather(
-            OPEN_API_KEY,
-            city,
-            "metric",
-            context.getString(R.string.language)
+                OPEN_API_KEY,
+                city,
+                "metric",
+                context.getString(R.string.language)
         )
         try {
             val response = call?.execute()
@@ -44,8 +44,8 @@ class Controller : Callback<ModelForGSONWeatherClass?> {
     }
 
     override fun onResponse(
-        call: Call<ModelForGSONWeatherClass?>,
-        response: Response<ModelForGSONWeatherClass?>
+            call: Call<ModelForGSONWeatherClass?>,
+            response: Response<ModelForGSONWeatherClass?>
     ) {
         Log.d("code", response.code().toString())
         if (response.isSuccessful && response.body() != null) {

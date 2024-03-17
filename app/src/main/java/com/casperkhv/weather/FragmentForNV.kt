@@ -12,8 +12,8 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import java.io.BufferedReader
-import java.io.FileOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.io.FileReader
 
 class FragmentForNV : Fragment() {
@@ -24,8 +24,8 @@ class FragmentForNV : Fragment() {
     var showImageFromInternet: Button? = null
     var imageFromInternet: ImageView? = null
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_for_n_v, container, false)
         initializeViews(rootView)
@@ -40,15 +40,6 @@ class FragmentForNV : Fragment() {
                     showLog(getText(R.string.toast_external_storage_not_found))
                     return
                 }
-                //                File dir = new File(getActivity().getExternalFilesDir(null).getPath());
-//                if (!dir.exists()) {// так как мы обращаемся к корню (null вверху), то это проверка не имеет смысла (если нет корня, то и приложения не существует).
-//                    // В случае указания конкретного пути вместо null(можно было заменить null на некую вложенность типа "/123/321", т.е. указываем конкретную папку), такая проверка нужна!
-//                    dir.mkdirs();
-//                }
-//
-//                File file = new File(dir, NAME_OF_FILE);
-
-//                File file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), NAME_OF_FILE);
                 val file = File(activity!!.filesDir, NAME_OF_FILE)
                 val message = messageForFile.text.toString()
                 if (!message.isEmpty()) {
@@ -73,7 +64,6 @@ class FragmentForNV : Fragment() {
                     return
                 }
                 try {
-//                    File file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), NAME_OF_FILE);
                     val file = File(activity!!.filesDir, NAME_OF_FILE)
                     if (!file.exists()) {
                         showLog(getString(R.string.toast_file_not_exist))
@@ -83,14 +73,10 @@ class FragmentForNV : Fragment() {
                     val br = BufferedReader(FileReader(file))
                     var line: String?
 
-                    // есть текст в br считываем его построчно
                     while (br.readLine().also { line = it } != null) {
-                        // добавляем считанное в StringBuilder
                         text.append(line)
-                        // перенос на новую строку не считывается поэтому добавляем его
                         text.append('\n')
                     }
-                    // последний добавленный перенос лишний, убираем его
                     text.deleteCharAt(text.length - 1)
                     br.close()
                     messageForFile.setText(text)
@@ -105,7 +91,6 @@ class FragmentForNV : Fragment() {
         object : Thread() {
             override fun run() {
                 try {
-//                    File file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), NAME_OF_FILE);
                     val file = File(activity!!.filesDir, NAME_OF_FILE)
                     if (file.exists()) {
                         if (file.delete()) {
@@ -134,8 +119,6 @@ class FragmentForNV : Fragment() {
         showImageFromInternet?.setOnClickListener(::showImageFromInternet)
     }
 
-    // проверим доступен ли external storage для записи/чтения
-    // обычно он может быть не доступен либо из-за сбоя ОС, либо из-за нехватки оперативной памяти
     private val isExternalStorageWritable: Boolean
         private get() {
             val state = Environment.getExternalStorageState()
@@ -144,7 +127,6 @@ class FragmentForNV : Fragment() {
             } else false
         }
 
-    // проверим доступен ли external storage для чтения
     private val isExternalStorageReadable: Boolean
         private get() {
             val state = Environment.getExternalStorageState()
@@ -159,10 +141,10 @@ class FragmentForNV : Fragment() {
 
     private fun showImageFromInternet(view: View) {
         Glide
-            .with(view)
-            .load("https://img-fotki.yandex.ru/get/4130/36014149.180/0_80731_c5cd79f0_M.png")
-            .override(500)
-            .into(imageFromInternet!!)
+                .with(view)
+                .load("https://img-fotki.yandex.ru/get/4130/36014149.180/0_80731_c5cd79f0_M.png")
+                .override(500)
+                .into(imageFromInternet!!)
     }
 
     companion object {

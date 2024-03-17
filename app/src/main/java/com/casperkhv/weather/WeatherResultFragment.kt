@@ -24,12 +24,11 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.Serializable
 
 class WeatherResultFragment : Fragment(), View.OnClickListener {
-    //блок для RecyclerView
-    private var noteDataSourceForHistory // Источник данных
+    private var noteDataSourceForHistory
             : NoteDataSourceForHistory? = null
-    private var noteDataReaderForHistory // Читатель данных
+    private var noteDataReaderForHistory
             : NoteDataReaderForHistory? = null
-    private var adapter // Адаптер для RecyclerView
+    private var adapterRV
             : MyAdapter? = null
     private val historyListListener: HistoryListListener? = null
     var city: String? = null
@@ -41,22 +40,20 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
     private var message: String? = null
     private var photoWeather: ImageView? = null
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_weather_result, container, false)
         noteDataSourceForHistory = NoteDataSourceForHistory(activity)
         val citiesCategoriesRecyclerView: RecyclerView =
-            view.findViewById(R.id.recycler_view_history)
+                view.findViewById(R.id.recycler_view_history)
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = RecyclerView.VERTICAL
         citiesCategoriesRecyclerView.layoutManager = layoutManager
-        //        citiesCategoriesRecyclerView.setAdapter(new MyAdapter());
-        adapter = MyAdapter()
-        citiesCategoriesRecyclerView.adapter = adapter
+        adapterRV = MyAdapter()
+        citiesCategoriesRecyclerView.adapter = adapterRV
 
-//        historyListListener.transfer(noteDataSourceForHistory, noteDataReaderForHistory, adapter);
         photoWeather = view.findViewById(R.id.photoWeather)
         weatherText = view.findViewById(R.id.textview_weather)
         shareButton = view.findViewById(R.id.button_share)
@@ -114,8 +111,8 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             weatherText!!.text = message
             val intentResult = Intent()
             intentResult.putExtra(
-                CitiesListFragment.Companion.RESULT_OK_STRING,
-                resources.getString(R.string.repeat_choose_city)
+                    CitiesListFragment.Companion.RESULT_OK_STRING,
+                    resources.getString(R.string.repeat_choose_city)
             )
             requireActivity().setResult(Activity.RESULT_OK, intentResult)
         }
@@ -124,9 +121,9 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             Log.d("кол-во", Integer.toString(noteDataReaderForHistory!!.count))
             Log.d("дата", dateForHistory!!)
             if (noteDataReaderForHistory!!.getCountForAvoidRepetition(
-                    city!!,
-                    dateForHistory!!
-                ) == 0
+                            city!!,
+                            dateForHistory!!
+                    ) == 0
             ) {
                 noteDataSourceForHistory!!.addNote(dateForHistory, city, history)
             } else {
@@ -135,7 +132,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         }
         val fragmentManager = childFragmentManager
         var checkBoxWeatherResultFragment =
-            fragmentManager.findFragmentByTag(INNER_FRAGMENT_TAG) as CheckBoxWeatherResultFragment?
+                fragmentManager.findFragmentByTag(INNER_FRAGMENT_TAG) as CheckBoxWeatherResultFragment?
         if (checkBoxWeatherResultFragment == null) {
             val pressure = dataForBundle!!.resultPressure
             val feels = dataForBundle!!.resultFeels
@@ -143,11 +140,11 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             if (pressure != null || feels != null || humidity != null) {
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 checkBoxWeatherResultFragment =
-                    CheckBoxWeatherResultFragment.Companion.newInstance(pressure, feels, humidity)
+                        CheckBoxWeatherResultFragment.Companion.newInstance(pressure, feels, humidity)
                 fragmentTransaction.replace(
-                    R.id.inner_fragment_container,
-                    checkBoxWeatherResultFragment,
-                    INNER_FRAGMENT_TAG
+                        R.id.inner_fragment_container,
+                        checkBoxWeatherResultFragment,
+                        INNER_FRAGMENT_TAG
                 )
                 fragmentTransaction.commit()
             }
@@ -205,56 +202,37 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         super.onSaveInstanceState(outState)
     }
 
-    //далее всё для Recycler View
     internal interface HistoryListListener {
         fun onListItemClick(id: Int, dataForBundle: DataForBundle?, descriptionText: TextView?)
         fun transfer(
-            noteDataSourceForHistory: NoteDataSourceForHistory?,
-            noteDataReaderForHistory: NoteDataReaderForHistory?,
-            adapter: MyAdapter?
+                noteDataSourceForHistory: NoteDataSourceForHistory?,
+                noteDataReaderForHistory: NoteDataReaderForHistory?,
+                adapter: MyAdapter?
         )
     }
 
-    //    @Override
-    //    public void onAttach(Context context) {
-    //        try {
-    //            historyListListener = (HistoryListListener) context;
-    //        } catch (ClassCastException | NullPointerException e) {
-    //            throw new IllegalArgumentException(context.toString() + " must implement HistoryListListener");
-    //        }
-    //        super.onAttach(context);
-    //    }
     inner class MyViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup?) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_history, parent, false)),
-        View.OnClickListener {
+            RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_history, parent, false)),
+            View.OnClickListener {
         private val categoryNameTextView: TextView
         private val photo: ImageView? = null
         private val textNote: TextView? = null
         private var note: HistoryNote? = null
 
-        //        void bind(int position) {
-        //            String category = getResources().getStringArray(R.array.cityes_selection)[position];
-        //            categoryNameTextView.setText(category);
-        //        }
+
         fun bind(note: HistoryNote?) {
             this.note = note
             categoryNameTextView.text = note!!.date
         }
 
         override fun onClick(view: View) {
-            //showActivity(this.getLayoutPosition());
-
-            // Выведем диалоговое окно для редактирования записи
             val factory = LayoutInflater.from(activity)
-            // alertView пригодится в дальнейшем для поиска пользовательских элементов
             val alertView = factory.inflate(R.layout.layout_history_description, null)
             val builder = AlertDialog.Builder(
-                activity!!
+                    activity!!
             )
             builder.setView(alertView)
-            //            builder.setTitle(note.getDate());
             val title = TextView(activity)
-            // Customise your Title here
             title.text = note!!.date
             title.setBackgroundColor(Color.DKGRAY)
             title.setPadding(10, 10, 10, 10)
@@ -263,20 +241,16 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             title.textSize = 20f
             builder.setCustomTitle(title)
             val editTextNote = alertView.findViewById<TextView>(R.id.textDescriptionHistory)
-            // Если использовать findViewById без alertView, то всегда будем получать editText = null
-            editTextNote.text = note!!.description
+            editTextNote.text = note!!.descriptionWeather
             builder.setNegativeButton(R.string.Close, null)
             builder.show()
         }
 
         private fun showPopupMenu(view: View) {
-// Покажем меню на элементе
             val popup = PopupMenu(view.context, view)
             val inflater = popup.menuInflater
             inflater.inflate(R.menu.context_menu_for_history, popup.menu)
             popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-                // Обработка выбора пункта меню
-                // Делегируем обработку слушателю
                 when (item.itemId) {
                     R.id.menu_for_history_delete -> {
                         deleteElement(note)
@@ -296,14 +270,12 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         init {
             itemView.setOnClickListener(this)
             categoryNameTextView =
-                itemView.findViewById<View>(R.id.item_of_history_name_text_view) as TextView
+                    itemView.findViewById<View>(R.id.item_of_history_name_text_view) as TextView
 
-// При долгом нажатии на элементе – вытащим  меню
             categoryNameTextView.setOnLongClickListener {
                 showPopupMenu(categoryNameTextView)
                 true
             }
-            // при быстром нажатии откроем инфу о погоде в выбранном городе
             categoryNameTextView.setOnClickListener(this)
         }
     }
@@ -314,23 +286,11 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             return MyViewHolder(inflater, parent)
         }
 
-        //        @Override
-        //        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //// Создаем новый элемент пользовательского интерфейса
-        //// Через Inflater
-        //            View v = LayoutInflater.from(parent.getContext())
-        //                    .inflate(R.layout.category_list_item, parent, false);
-        //// Здесь можно установить всякие параметры
-        //            MyViewHolder vh = new MyViewHolder(inf);
-        //            return vh;
-        //        }
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//            holder.bind(position);
             holder.bind(noteDataReaderForHistory!!.getPosition(position))
         }
 
         override fun getItemCount(): Int {
-//            return getResources().getStringArray(R.array.cityes_selection).length;
             return noteDataReaderForHistory!!.count
         }
     }
@@ -347,7 +307,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
 
     private fun dataUpdated() {
         noteDataReaderForHistory!!.Refresh(city)
-        adapter!!.notifyDataSetChanged()
+        adapterRV!!.notifyDataSetChanged()
     }
 
     private fun initDataSource() {
