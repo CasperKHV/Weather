@@ -6,21 +6,16 @@ import android.database.sqlite.SQLiteDatabase
 import java.io.Closeable
 import java.io.IOException
 
-//  Источник данных, позволяет изменять данные в таблице
-// Создает и держит в себе читатель данных
 class NoteDataSource(context: Context?) : Closeable {
     private val dbHelper: DatabaseHelper
     private var database: SQLiteDatabase? = null
 
-    // Вернуть читателя (он потребуется в других местах)
     var noteDataReader: NoteDataReader? = null
         private set
 
-    // Открывает базу данных
     @Throws(SQLException::class)
     fun open() {
         database = dbHelper.writableDatabase
-        // Создать читателя и открыть его
         noteDataReader = NoteDataReader(database)
         noteDataReader!!.open()
     }
@@ -31,12 +26,10 @@ class NoteDataSource(context: Context?) : Closeable {
         dbHelper.close()
     }
 
-    // Добавить новую запись
     fun addNote(title: String?, description: String?): CityNote {
         val values = ContentValues()
-        values.put(DatabaseHelper.Companion.COLUMN_NOTE, description)
-        values.put(DatabaseHelper.Companion.COLUMN_NOTE_TITLE, title)
-        // Добавление записи
+        values.put(DatabaseHelper.Companion.COLUMN_WEATHER_NOTE, description)
+        values.put(DatabaseHelper.Companion.COLUMN_NOTE_TITLE_CITY, title)
         val insertId = database!!.insert(DatabaseHelper.Companion.TABLE_NOTES, null, values)
         val note = CityNote()
         note.id = insertId
@@ -45,13 +38,11 @@ class NoteDataSource(context: Context?) : Closeable {
         return note
     }
 
-    // Изменить запись
     fun editNote(note: CityNote?, title: String?, description: String?) {
         val editedNote = ContentValues()
         editedNote.put(DatabaseHelper.Companion.COLUMN_ID, note!!.id)
-        editedNote.put(DatabaseHelper.Companion.COLUMN_NOTE, description)
-        editedNote.put(DatabaseHelper.Companion.COLUMN_NOTE_TITLE, title)
-        // Изменение записи
+        editedNote.put(DatabaseHelper.Companion.COLUMN_WEATHER_NOTE, description)
+        editedNote.put(DatabaseHelper.Companion.COLUMN_NOTE_TITLE_CITY, title)
         database!!.update(
             DatabaseHelper.Companion.TABLE_NOTES,
             editedNote,
@@ -60,7 +51,6 @@ class NoteDataSource(context: Context?) : Closeable {
         )
     }
 
-    // Удалить запись
     fun deleteNote(note: CityNote?) {
         val id = note!!.id
         database!!.delete(
@@ -70,7 +60,6 @@ class NoteDataSource(context: Context?) : Closeable {
         )
     }
 
-    // Очистить таблицу
     fun deleteAll() {
         database!!.delete(DatabaseHelper.Companion.TABLE_NOTES, null, null)
     }

@@ -25,12 +25,9 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     private val drawer by bindView<DrawerLayout>(R.id.drawer_layout)
     private var descriptionText: TextView? = null
     private var mAppBarConfiguration: AppBarConfiguration? = null
-    private var notesDataSource // Источник данных
-            : NoteDataSource? = null
-    private var noteDataReader // Читатель данных
-            : NoteDataReader? = null
-    private var adapter // Адаптер для RecyclerView
-            : CitiesListFragment.MyAdapter? = null
+    private var notesDataSource: NoteDataSource? = null
+    private var noteDataReader: NoteDataReader? = null
+    private var adapterRV: CitiesListFragment.MyAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +101,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     ) {
         notesDataSource = notesDataSourceNoteDataSource
         this.noteDataReader = noteDataReader
-        this.adapter = adapter
+        this.adapterRV = adapter
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -148,9 +145,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     }
 
     private fun addElement() {
-// Выведем диалоговое окно для ввода новой записи
         val factory = LayoutInflater.from(this)
-        // alertView пригодится в дальнейшем для поиска пользовательских элементов
         val alertView = factory.inflate(R.layout.layout_add_city_note, null)
         val builder = AlertDialog.Builder(this)
         builder.setView(alertView)
@@ -159,7 +154,6 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         builder.setPositiveButton(R.string.menu_add) { dialog, id ->
             val editTextNote = alertView.findViewById<EditText>(R.id.editTextNote)
             val editTextNoteTitle = alertView.findViewById<EditText>(R.id.editTextNoteTitle)
-            // Если использовать findViewById без alertView, то всегда будем получать editText = null
             notesDataSource!!.addNote(
                 editTextNoteTitle.text.toString(),
                 editTextNote.text.toString()
@@ -171,7 +165,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
 
     private fun dataUpdated() {
         noteDataReader!!.Refresh()
-        adapter!!.notifyDataSetChanged()
+        adapterRV!!.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
@@ -185,7 +179,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     override fun onSupportNavigateUp(): Boolean {
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         return (NavigationUI.navigateUp(navController, mAppBarConfiguration!!)
-                || super.onSupportNavigateUp())
+            || super.onSupportNavigateUp())
     }
 
     companion object {
