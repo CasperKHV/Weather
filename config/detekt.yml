@@ -1,0 +1,9 @@
+config:
+  validation: true
+  warningsAsErrors: true
+complexity:
+  LongMethod:
+    active: false
+style:
+  NewLineAtEndOfFile:
+    active: false
