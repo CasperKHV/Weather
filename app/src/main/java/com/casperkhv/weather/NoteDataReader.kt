@@ -6,14 +6,13 @@ import java.io.Closeable
 import java.io.IOException
 
 class NoteDataReader(
-        private val database: SQLiteDatabase?
+    private val database: SQLiteDatabase?
 ) : Closeable {
-    private var cursor
-            : Cursor? = null
+    private var cursor: Cursor? = null
     private val notesAllColumn = arrayOf<String>(
-            DatabaseHelper.Companion.COLUMN_ID,
-            DatabaseHelper.Companion.COLUMN_WEATHER_NOTE,
-            DatabaseHelper.Companion.COLUMN_NOTE_TITLE_CITY
+        DatabaseHelper.Companion.COLUMN_ID,
+        DatabaseHelper.Companion.COLUMN_WEATHER_NOTE,
+        DatabaseHelper.Companion.COLUMN_NOTE_TITLE_CITY
     )
 
     fun open() {
@@ -34,8 +33,8 @@ class NoteDataReader(
 
     private fun query() {
         cursor = database!!.query(
-                DatabaseHelper.Companion.TABLE_NOTES,
-                notesAllColumn, null, null, null, null, null
+            DatabaseHelper.Companion.TABLE_NOTES,
+            notesAllColumn, null, null, null, null, null
         )
     }
 

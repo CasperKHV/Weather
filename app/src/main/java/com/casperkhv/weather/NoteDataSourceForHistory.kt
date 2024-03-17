@@ -32,7 +32,7 @@ class NoteDataSourceForHistory(context: Context?) : Closeable {
         values.put(DatabaseHelperForHistory.Companion.COLUMN_WEATHER_NOTE, description)
         values.put(DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY, title)
         val insertId =
-                database!!.insert(DatabaseHelperForHistory.Companion.TABLE_NOTES, null, values)
+            database!!.insert(DatabaseHelperForHistory.Companion.TABLE_NOTES, null, values)
         val note = HistoryNote()
         note.id = insertId
         note.date = date
@@ -47,27 +47,27 @@ class NoteDataSourceForHistory(context: Context?) : Closeable {
         editedNote.put(DatabaseHelperForHistory.Companion.COLUMN_WEATHER_NOTE, description)
         editedNote.put(DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY, title)
         database!!.update(
-                DatabaseHelperForHistory.Companion.TABLE_NOTES,
-                editedNote,
-                DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= '" + title + "' AND " + DatabaseHelperForHistory.Companion.COLUMN_DATE + "= '" + date + "'",
-                null
+            DatabaseHelperForHistory.Companion.TABLE_NOTES,
+            editedNote,
+            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= '" + title + "' AND " + DatabaseHelperForHistory.Companion.COLUMN_DATE + "= '" + date + "'",
+            null
         )
     }
 
     fun deleteNote(note: HistoryNote?) {
         val id = note!!.id
         database!!.delete(
-                DatabaseHelperForHistory.Companion.TABLE_NOTES,
-                DatabaseHelperForHistory.Companion.COLUMN_ID + "=" + id,
-                null
+            DatabaseHelperForHistory.Companion.TABLE_NOTES,
+            DatabaseHelperForHistory.Companion.COLUMN_ID + "=" + id,
+            null
         )
     }
 
     fun deleteHistoryForCity(city: String?) {
         database!!.delete(
-                DatabaseHelperForHistory.Companion.TABLE_NOTES,
-                DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ?",
-                arrayOf(city)
+            DatabaseHelperForHistory.Companion.TABLE_NOTES,
+            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ?",
+            arrayOf(city)
         )
     }
 

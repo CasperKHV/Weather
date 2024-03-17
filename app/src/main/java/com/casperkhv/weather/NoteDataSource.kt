@@ -44,19 +44,19 @@ class NoteDataSource(context: Context?) : Closeable {
         editedNote.put(DatabaseHelper.Companion.COLUMN_WEATHER_NOTE, description)
         editedNote.put(DatabaseHelper.Companion.COLUMN_NOTE_TITLE_CITY, title)
         database!!.update(
-                DatabaseHelper.Companion.TABLE_NOTES,
-                editedNote,
-                DatabaseHelper.Companion.COLUMN_ID + "=" + note.id,
-                null
+            DatabaseHelper.Companion.TABLE_NOTES,
+            editedNote,
+            DatabaseHelper.Companion.COLUMN_ID + "=" + note.id,
+            null
         )
     }
 
     fun deleteNote(note: CityNote?) {
         val id = note!!.id
         database!!.delete(
-                DatabaseHelper.Companion.TABLE_NOTES,
-                DatabaseHelper.Companion.COLUMN_ID + "=" + id,
-                null
+            DatabaseHelper.Companion.TABLE_NOTES,
+            DatabaseHelper.Companion.COLUMN_ID + "=" + id,
+            null
         )
     }
 

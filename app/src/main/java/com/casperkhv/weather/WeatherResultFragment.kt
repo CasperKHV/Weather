@@ -24,12 +24,9 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.Serializable
 
 class WeatherResultFragment : Fragment(), View.OnClickListener {
-    private var noteDataSourceForHistory
-            : NoteDataSourceForHistory? = null
-    private var noteDataReaderForHistory
-            : NoteDataReaderForHistory? = null
-    private var adapterRV
-            : MyAdapter? = null
+    private var noteDataSourceForHistory: NoteDataSourceForHistory? = null
+    private var noteDataReaderForHistory: NoteDataReaderForHistory? = null
+    private var adapterRV: MyAdapter? = null
     private val historyListListener: HistoryListListener? = null
     var city: String? = null
     var history: String? = null
@@ -40,15 +37,15 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
     private var message: String? = null
     private var photoWeather: ImageView? = null
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_weather_result, container, false)
-        noteDataSourceForHistory = NoteDataSourceForHistory(activity)
+        noteDataSourceForHistory = NoteDataSourceForHistory(requireActivity())
         val citiesCategoriesRecyclerView: RecyclerView =
-                view.findViewById(R.id.recycler_view_history)
-        val layoutManager = LinearLayoutManager(activity)
+            view.findViewById(R.id.recycler_view_history)
+        val layoutManager = LinearLayoutManager(requireActivity())
         layoutManager.orientation = RecyclerView.VERTICAL
         citiesCategoriesRecyclerView.layoutManager = layoutManager
         adapterRV = MyAdapter()
@@ -111,8 +108,8 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             weatherText!!.text = message
             val intentResult = Intent()
             intentResult.putExtra(
-                    CitiesListFragment.Companion.RESULT_OK_STRING,
-                    resources.getString(R.string.repeat_choose_city)
+                CitiesListFragment.Companion.RESULT_OK_STRING,
+                resources.getString(R.string.repeat_choose_city)
             )
             requireActivity().setResult(Activity.RESULT_OK, intentResult)
         }
@@ -121,9 +118,9 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             Log.d("кол-во", Integer.toString(noteDataReaderForHistory!!.count))
             Log.d("дата", dateForHistory!!)
             if (noteDataReaderForHistory!!.getCountForAvoidRepetition(
-                            city!!,
-                            dateForHistory!!
-                    ) == 0
+                    city!!,
+                    dateForHistory!!
+                ) == 0
             ) {
                 noteDataSourceForHistory!!.addNote(dateForHistory, city, history)
             } else {
@@ -132,7 +129,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         }
         val fragmentManager = childFragmentManager
         var checkBoxWeatherResultFragment =
-                fragmentManager.findFragmentByTag(INNER_FRAGMENT_TAG) as CheckBoxWeatherResultFragment?
+            fragmentManager.findFragmentByTag(INNER_FRAGMENT_TAG) as CheckBoxWeatherResultFragment?
         if (checkBoxWeatherResultFragment == null) {
             val pressure = dataForBundle!!.resultPressure
             val feels = dataForBundle!!.resultFeels
@@ -140,11 +137,11 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             if (pressure != null || feels != null || humidity != null) {
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 checkBoxWeatherResultFragment =
-                        CheckBoxWeatherResultFragment.Companion.newInstance(pressure, feels, humidity)
+                    CheckBoxWeatherResultFragment.Companion.newInstance(pressure, feels, humidity)
                 fragmentTransaction.replace(
-                        R.id.inner_fragment_container,
-                        checkBoxWeatherResultFragment,
-                        INNER_FRAGMENT_TAG
+                    R.id.inner_fragment_container,
+                    checkBoxWeatherResultFragment,
+                    INNER_FRAGMENT_TAG
                 )
                 fragmentTransaction.commit()
             }
@@ -205,15 +202,15 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
     internal interface HistoryListListener {
         fun onListItemClick(id: Int, dataForBundle: DataForBundle?, descriptionText: TextView?)
         fun transfer(
-                noteDataSourceForHistory: NoteDataSourceForHistory?,
-                noteDataReaderForHistory: NoteDataReaderForHistory?,
-                adapter: MyAdapter?
+            noteDataSourceForHistory: NoteDataSourceForHistory?,
+            noteDataReaderForHistory: NoteDataReaderForHistory?,
+            adapter: MyAdapter?
         )
     }
 
     inner class MyViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup?) :
-            RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_history, parent, false)),
-            View.OnClickListener {
+        RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_history, parent, false)),
+        View.OnClickListener {
         private val categoryNameTextView: TextView
         private val photo: ImageView? = null
         private val textNote: TextView? = null
@@ -226,13 +223,11 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         }
 
         override fun onClick(view: View) {
-            val factory = LayoutInflater.from(activity)
+            val factory = LayoutInflater.from(requireActivity())
             val alertView = factory.inflate(R.layout.layout_history_description, null)
-            val builder = AlertDialog.Builder(
-                    activity!!
-            )
+            val builder = AlertDialog.Builder(requireActivity())
             builder.setView(alertView)
-            val title = TextView(activity)
+            val title = TextView(requireActivity())
             title.text = note!!.date
             title.setBackgroundColor(Color.DKGRAY)
             title.setPadding(10, 10, 10, 10)
@@ -270,7 +265,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         init {
             itemView.setOnClickListener(this)
             categoryNameTextView =
-                    itemView.findViewById<View>(R.id.item_of_history_name_text_view) as TextView
+                itemView.findViewById<View>(R.id.item_of_history_name_text_view) as TextView
 
             categoryNameTextView.setOnLongClickListener {
                 showPopupMenu(categoryNameTextView)

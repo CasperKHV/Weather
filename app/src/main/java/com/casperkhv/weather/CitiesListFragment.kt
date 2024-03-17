@@ -20,12 +20,9 @@ import java.util.Date
 
 class CitiesListFragment : Fragment() {
     private var errorCode = false
-    private var notesDataSource
-            : NoteDataSource? = null
-    private var noteDataReader
-            : NoteDataReader? = null
-    private var adapterRV
-            : MyAdapter? = null
+    private var notesDataSource: NoteDataSource? = null
+    private var noteDataReader: NoteDataReader? = null
+    private var adapterRV: MyAdapter? = null
     private var savedCity: SharedPreferences? = null
     private var checkBoxPressure: CheckBox? = null
     private var checkBoxFeels: CheckBox? = null
@@ -36,9 +33,9 @@ class CitiesListFragment : Fragment() {
     internal interface CitiesListListener {
         fun onListItemClick(id: Int, dataForBundle: DataForBundle?, descriptionText: TextView?)
         fun transfer(
-                notesDataSourceNoteDataSource: NoteDataSource?,
-                noteDataReader: NoteDataReader?,
-                adapter: MyAdapter?
+            notesDataSourceNoteDataSource: NoteDataSource?,
+            noteDataReader: NoteDataReader?,
+            adapter: MyAdapter?
         )
     }
 
@@ -54,9 +51,9 @@ class CitiesListFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_cities_list, container, false)
         initDataSource()
@@ -77,11 +74,9 @@ class CitiesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializePreferences()
-        checkBoxPressure!!.isChecked =
-                savedCity!!.getBoolean(CHECK_BOX_PRESSURE, false)
+        checkBoxPressure!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_PRESSURE, false)
         checkBoxFeels!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_FEELS, false)
-        checkBoxHumidity!!.isChecked =
-                savedCity!!.getBoolean(CHECK_BOX_HUMIDITY, false)
+        checkBoxHumidity!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_HUMIDITY, false)
         val previousWeatherId = savedCity!!.getInt(PREVIOUS_WEATHER_ID, -1)
         if (previousWeatherId != -1) {
             showActivity(previousWeatherId)
@@ -89,8 +84,8 @@ class CitiesListFragment : Fragment() {
     }
 
     inner class MyViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup?) :
-            RecyclerView.ViewHolder(inflater.inflate(R.layout.category_list_item, parent, false)),
-            View.OnClickListener {
+        RecyclerView.ViewHolder(inflater.inflate(R.layout.category_list_item, parent, false)),
+        View.OnClickListener {
         private val categoryNameTextView: TextView
         private val photo: ImageView? = null
         private val textNote: TextView? = null
@@ -128,7 +123,7 @@ class CitiesListFragment : Fragment() {
         init {
             itemView.setOnClickListener(this)
             categoryNameTextView =
-                    itemView.findViewById<View>(R.id.category_name_text_view) as TextView
+                itemView.findViewById<View>(R.id.category_name_text_view) as TextView
 
             categoryNameTextView.setOnLongClickListener {
                 showPopupMenu(categoryNameTextView)
@@ -165,7 +160,7 @@ class CitiesListFragment : Fragment() {
                 val city = noteDataReader!!.getPosition(categoryId).description
                 savedCity!!.edit().putInt(PREVIOUS_WEATHER_ID, categoryId).apply()
                 val cityNamesForAPI = resources.getStringArray(R.array.city_names_for_load_weather)
-                val weather = controller.start(activity!!, city)
+                val weather = controller.start(requireActivity(), city)
                 if (weather == null) {
                     errorCode = true
                     return
@@ -173,7 +168,7 @@ class CitiesListFragment : Fragment() {
                 val cityForBundle = weather.name
                 val resultWeather = WeatherSpec.getWeather(activity, categoryId, weather)
                 val resultWeatherHistory =
-                        WeatherSpec.getWeatherHistory(activity, weather, currentDate)
+                    WeatherSpec.getWeatherHistory(activity, weather, currentDate)
                 val dateForHistory = WeatherSpec.getDate(activity, currentDate)
                 if (checkBoxPressure!!.isChecked) {
                     if (weather != null) {
@@ -188,15 +183,15 @@ class CitiesListFragment : Fragment() {
                 }
                 iconCode = weather.weather[0]!!.icon
                 val dataForBundle = DataForBundle(
-                        resultPressure,
-                        resultFeels,
-                        resultHumidity,
-                        resultWeather,
-                        dateForHistory,
-                        resultWeatherHistory,
-                        iconCode,
-                        categoryId,
-                        cityForBundle
+                    resultPressure,
+                    resultFeels,
+                    resultHumidity,
+                    resultWeather,
+                    dateForHistory,
+                    resultWeatherHistory,
+                    iconCode,
+                    categoryId,
+                    cityForBundle
                 )
                 citiesListListener!!.onListItemClick(categoryId, dataForBundle, descriptionText)
             }
@@ -235,7 +230,7 @@ class CitiesListFragment : Fragment() {
         val factory = LayoutInflater.from(activity)
         val alertView = factory.inflate(R.layout.layout_add_city_note, null)
         val builder = AlertDialog.Builder(
-                requireActivity()
+            requireActivity()
         )
         builder.setView(alertView)
         builder.setTitle(R.string.alert_title_add)
@@ -246,9 +241,9 @@ class CitiesListFragment : Fragment() {
         builder.setNegativeButton(R.string.alert_cancel, null)
         builder.setPositiveButton(R.string.refresh_the_note) { dialog, id ->
             notesDataSource!!.editNote(
-                    note,
-                    editTextNoteTitle.text.toString(),
-                    editTextNote.text.toString()
+                note,
+                editTextNoteTitle.text.toString(),
+                editTextNote.text.toString()
             )
             dataUpdated()
         }
@@ -273,16 +268,16 @@ class CitiesListFragment : Fragment() {
 
     private fun initCities() {
         notesDataSource!!.addNote(
-                requireActivity().resources.getStringArray(R.array.cityes_selection)[0],
-                requireActivity().resources.getStringArray(R.array.city_names_for_load_weather)[0]
+            requireActivity().resources.getStringArray(R.array.cityes_selection)[0],
+            requireActivity().resources.getStringArray(R.array.city_names_for_load_weather)[0]
         )
         notesDataSource!!.addNote(
-                requireActivity().resources.getStringArray(R.array.cityes_selection)[1],
-                requireActivity().resources.getStringArray(R.array.city_names_for_load_weather)[1]
+            requireActivity().resources.getStringArray(R.array.cityes_selection)[1],
+            requireActivity().resources.getStringArray(R.array.city_names_for_load_weather)[1]
         )
         notesDataSource!!.addNote(
-                requireActivity().resources.getStringArray(R.array.cityes_selection)[2],
-                requireActivity().resources.getStringArray(R.array.city_names_for_load_weather)[2]
+            requireActivity().resources.getStringArray(R.array.cityes_selection)[2],
+            requireActivity().resources.getStringArray(R.array.city_names_for_load_weather)[2]
         )
         dataUpdated()
     }

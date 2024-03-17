@@ -8,16 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class MyAdapter(
-        private val noteDataReader: NoteDataReader
+    private val noteDataReader: NoteDataReader
 ) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
     private var itemMenuClickListener: OnMenuItemClickListener? = null
 
     override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): ViewHolder {
         val v = LayoutInflater.from(parent.context)
-                .inflate(R.layout.category_list_item, parent, false)
+            .inflate(R.layout.category_list_item, parent, false)
         return ViewHolder(v)
     }
 

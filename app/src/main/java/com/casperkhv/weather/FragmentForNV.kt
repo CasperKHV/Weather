@@ -24,8 +24,8 @@ class FragmentForNV : Fragment() {
     var showImageFromInternet: Button? = null
     var imageFromInternet: ImageView? = null
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_for_n_v, container, false)
         initializeViews(rootView)
@@ -40,7 +40,7 @@ class FragmentForNV : Fragment() {
                     showLog(getText(R.string.toast_external_storage_not_found))
                     return
                 }
-                val file = File(activity!!.filesDir, NAME_OF_FILE)
+                val file = File(requireActivity().filesDir, NAME_OF_FILE)
                 val message = messageForFile.text.toString()
                 if (!message.isEmpty()) {
                     try {
@@ -64,7 +64,7 @@ class FragmentForNV : Fragment() {
                     return
                 }
                 try {
-                    val file = File(activity!!.filesDir, NAME_OF_FILE)
+                    val file = File(requireActivity().filesDir, NAME_OF_FILE)
                     if (!file.exists()) {
                         showLog(getString(R.string.toast_file_not_exist))
                         return
@@ -91,7 +91,7 @@ class FragmentForNV : Fragment() {
         object : Thread() {
             override fun run() {
                 try {
-                    val file = File(activity!!.filesDir, NAME_OF_FILE)
+                    val file = File(requireActivity().filesDir, NAME_OF_FILE)
                     if (file.exists()) {
                         if (file.delete()) {
                             showLog(getString(R.string.toast_file_deleted))
@@ -141,10 +141,10 @@ class FragmentForNV : Fragment() {
 
     private fun showImageFromInternet(view: View) {
         Glide
-                .with(view)
-                .load("https://img-fotki.yandex.ru/get/4130/36014149.180/0_80731_c5cd79f0_M.png")
-                .override(500)
-                .into(imageFromInternet!!)
+            .with(view)
+            .load("https://img-fotki.yandex.ru/get/4130/36014149.180/0_80731_c5cd79f0_M.png")
+            .override(500)
+            .into(imageFromInternet!!)
     }
 
     companion object {

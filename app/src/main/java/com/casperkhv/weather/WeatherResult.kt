@@ -10,7 +10,7 @@ class WeatherResult : AppCompatActivity() {
         Log.d(TAG, "onCreate savedInstanceState$savedInstanceState")
         setContentView(R.layout.activity_weather_result)
         val resultFragment: WeatherResultFragment = WeatherResultFragment.Companion.newInstance(
-                intent.getSerializableExtra(WeatherResultFragment.Companion.DATA_FOR_BUNDLE)
+            intent.getSerializableExtra(WeatherResultFragment.Companion.DATA_FOR_BUNDLE)
         )
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, resultFragment)

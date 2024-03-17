@@ -6,15 +6,14 @@ import java.io.Closeable
 import java.io.IOException
 
 class NoteDataReaderForHistory(
-        private val database: SQLiteDatabase?
+    private val database: SQLiteDatabase?
 ) : Closeable {
-    private var cursor
-            : Cursor? = null
+    private var cursor: Cursor? = null
     private val notesAllColumn = arrayOf<String>(
-            DatabaseHelperForHistory.Companion.COLUMN_ID,
-            DatabaseHelperForHistory.Companion.COLUMN_DATE,
-            DatabaseHelperForHistory.Companion.COLUMN_WEATHER_NOTE,
-            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY
+        DatabaseHelperForHistory.Companion.COLUMN_ID,
+        DatabaseHelperForHistory.Companion.COLUMN_DATE,
+        DatabaseHelperForHistory.Companion.COLUMN_WEATHER_NOTE,
+        DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY
     )
 
     fun open(city: String?) {
@@ -35,25 +34,25 @@ class NoteDataReaderForHistory(
 
     private fun query(city: String?) {
         cursor = database!!.query(
-                DatabaseHelperForHistory.Companion.TABLE_NOTES,
-                notesAllColumn,
-                DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ?",
-                arrayOf(city),
-                null,
-                null,
-                null
+            DatabaseHelperForHistory.Companion.TABLE_NOTES,
+            notesAllColumn,
+            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ?",
+            arrayOf(city),
+            null,
+            null,
+            null
         )
     }
 
     fun getCountForAvoidRepetition(city: String, date: String): Int {
         return database!!.query(
-                DatabaseHelperForHistory.Companion.TABLE_NOTES,
-                notesAllColumn,
-                DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ? AND " + DatabaseHelperForHistory.Companion.COLUMN_DATE + "= ?",
-                arrayOf(city, date),
-                null,
-                null,
-                null
+            DatabaseHelperForHistory.Companion.TABLE_NOTES,
+            notesAllColumn,
+            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ? AND " + DatabaseHelperForHistory.Companion.COLUMN_DATE + "= ?",
+            arrayOf(city, date),
+            null,
+            null,
+            null
         ).count
     }
 
