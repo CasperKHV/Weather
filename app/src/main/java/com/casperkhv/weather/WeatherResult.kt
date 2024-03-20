@@ -15,8 +15,4 @@ internal class WeatherResult : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, resultFragment)
         transaction.commit()
     }
-
-    companion object {
-        private const val TAG = "### WeatherResult"
-    }
 }
