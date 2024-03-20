@@ -21,7 +21,7 @@ import androidx.navigation.ui.NavigationUI
 import com.casperkhv.weather.CitiesListFragment.CitiesListListener
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity(), CitiesListListener {
+internal class MainActivity : AppCompatActivity(), CitiesListListener {
     private val drawer by bindView<DrawerLayout>(R.id.drawer_layout)
     private var descriptionText: TextView? = null
     private var mAppBarConfiguration: AppBarConfiguration? = null
