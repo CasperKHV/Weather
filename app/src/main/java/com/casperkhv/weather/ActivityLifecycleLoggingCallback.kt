@@ -4,11 +4,17 @@ import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.FragmentActivity
 
 internal class ActivityLifecycleLoggingCallback : ActivityLifecycleCallbacks {
 
+    private val fragmentLifecycleLoggingCallback = FragmentLifecycleLoggingCallback()
+
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         Log.d(TAG, "${activity.localClassName} : Created")
+        if ((activity as? FragmentActivity) != null) {
+            activity.supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleLoggingCallback, true)
+        }
     }
 
     override fun onActivityStarted(activity: Activity) {
@@ -33,6 +39,9 @@ internal class ActivityLifecycleLoggingCallback : ActivityLifecycleCallbacks {
 
     override fun onActivityDestroyed(activity: Activity) {
         Log.d(TAG, "${activity.localClassName} : Destroyed")
+        if ((activity as? FragmentActivity) != null) {
+            activity.supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleLoggingCallback)
+        }
     }
 
     companion object {

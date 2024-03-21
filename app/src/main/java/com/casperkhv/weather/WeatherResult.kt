@@ -1,7 +1,6 @@
 package com.casperkhv.weather
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 internal class WeatherResult : AppCompatActivity() {
