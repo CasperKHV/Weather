@@ -21,7 +21,7 @@ import androidx.navigation.ui.NavigationUI
 import com.casperkhv.weather.CitiesListFragment.CitiesListListener
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity(), CitiesListListener {
+internal class MainActivity : AppCompatActivity(), CitiesListListener {
     private val drawer by bindView<DrawerLayout>(R.id.drawer_layout)
     private var descriptionText: TextView? = null
     private var mAppBarConfiguration: AppBarConfiguration? = null
@@ -46,31 +46,6 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         NavigationUI.setupWithNavController(navigationView, navController)
         val viewModel by viewModels<WeatherViewModel>()
         Log.d(TAG, "OnCreate after WeatherViewModel`s joining")
-    }
-
-    override fun onStart() {
-        Log.d(TAG, "onStart")
-        super.onStart()
-    }
-
-    override fun onResume() {
-        Log.d(TAG, "onResume")
-        super.onResume()
-    }
-
-    override fun onPause() {
-        Log.d(TAG, "onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d(TAG, "onStop")
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        Log.d(TAG, "onDestroy")
-        super.onDestroy()
     }
 
     override fun onListItemClick(
