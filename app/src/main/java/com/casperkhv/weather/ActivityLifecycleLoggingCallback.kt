@@ -7,10 +7,6 @@ import android.util.Log
 
 internal class ActivityLifecycleLoggingCallback : ActivityLifecycleCallbacks {
 
-    companion object {
-        private const val TAG: String = "lifecycle/activity"
-    }
-
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         Log.d(TAG, "${activity.localClassName} : Created")
     }
@@ -37,5 +33,9 @@ internal class ActivityLifecycleLoggingCallback : ActivityLifecycleCallbacks {
 
     override fun onActivityDestroyed(activity: Activity) {
         Log.d(TAG, "${activity.localClassName} : Destroyed")
+    }
+
+    companion object {
+        private const val TAG = "lifecycle/activity"
     }
 }
