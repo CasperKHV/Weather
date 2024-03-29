@@ -12,7 +12,7 @@ internal class ActivityLifecycleLoggingCallback : ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         Log.d(TAG, "${activity.localClassName} : Created")
-        if ((activity as? FragmentActivity) != null) {
+        if (activity is FragmentActivity) {
             activity.supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleLoggingCallback, true)
         }
     }
@@ -39,7 +39,7 @@ internal class ActivityLifecycleLoggingCallback : ActivityLifecycleCallbacks {
 
     override fun onActivityDestroyed(activity: Activity) {
         Log.d(TAG, "${activity.localClassName} : Destroyed")
-        if ((activity as? FragmentActivity) != null) {
+        if (activity is FragmentActivity) {
             activity.supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleLoggingCallback)
         }
     }

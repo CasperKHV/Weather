@@ -9,56 +9,59 @@ import androidx.fragment.app.FragmentManager
 
 internal class FragmentLifecycleLoggingCallback : FragmentManager.FragmentLifecycleCallbacks() {
 
+    private val Fragment.simpleName
+        get() = this::class.simpleName
+
     override fun onFragmentPreAttached(fm: FragmentManager, f: Fragment, context: Context) {
-        Log.d(TAG, "${f::class.simpleName} : PreAttached")
+        Log.d(TAG, "${f.simpleName} : PreAttached")
     }
 
     override fun onFragmentAttached(fm: FragmentManager, f: Fragment, context: Context) {
-        Log.d(TAG, "${f::class.simpleName} : Attached")
+        Log.d(TAG, "${f.simpleName} : Attached")
     }
 
     override fun onFragmentPreCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
-        Log.d(TAG, "${f::class.simpleName} : PreCreated")
+        Log.d(TAG, "${f.simpleName} : PreCreated")
     }
 
     override fun onFragmentCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
-        Log.d(TAG, "${f::class.simpleName} : Created")
+        Log.d(TAG, "${f.simpleName} : Created")
     }
 
     override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
-        Log.d(TAG, "${f::class.simpleName} : ViewCreated")
+        Log.d(TAG, "${f.simpleName} : ViewCreated")
     }
 
     override fun onFragmentStarted(fm: FragmentManager, f: Fragment) {
-        Log.d(TAG, "${f::class.simpleName} : Started")
+        Log.d(TAG, "${f.simpleName} : Started")
     }
 
     override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
-        Log.d(TAG, "${f::class.simpleName} : Resumed")
+        Log.d(TAG, "${f.simpleName} : Resumed")
     }
 
     override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
-        Log.d(TAG, "${f::class.simpleName} : Paused")
+        Log.d(TAG, "${f.simpleName} : Paused")
     }
 
     override fun onFragmentStopped(fm: FragmentManager, f: Fragment) {
-        Log.d(TAG, "${f::class.simpleName} : Stopped")
+        Log.d(TAG, "${f.simpleName} : Stopped")
     }
 
     override fun onFragmentSaveInstanceState(fm: FragmentManager, f: Fragment, outState: Bundle) {
-        Log.d(TAG, "${f::class.simpleName} : SaveInstanceState")
+        Log.d(TAG, "${f.simpleName} : SaveInstanceState")
     }
 
     override fun onFragmentViewDestroyed(fm: FragmentManager, f: Fragment) {
-        Log.d(TAG, "${f::class.simpleName} : ViewDestroyed")
+        Log.d(TAG, "${f.simpleName} : ViewDestroyed")
     }
 
     override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) {
-        Log.d(TAG, "${f::class.simpleName} : Destroyed")
+        Log.d(TAG, "${f.simpleName} : Destroyed")
     }
 
     override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
-        Log.d(TAG, "${f::class.simpleName} : Detached")
+        Log.d(TAG, "${f.simpleName} : Detached")
     }
 
     companion object {
