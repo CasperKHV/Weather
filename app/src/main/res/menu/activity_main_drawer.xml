@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <!--Здесь добавились группы пунктов. В них можно добавлять свойства
-    android:checkableBehavior="single" или android:checkableBehavior="all".
-    В первом случае мы получаем радиокнопки (radiobutton),
-    а во втором – кнопки выбора (checkbox). -->
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_list_fragment"

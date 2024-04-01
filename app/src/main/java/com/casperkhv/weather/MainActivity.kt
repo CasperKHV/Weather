@@ -21,15 +21,13 @@ import androidx.navigation.ui.NavigationUI
 import com.casperkhv.weather.CitiesListFragment.CitiesListListener
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity(), CitiesListListener {
+internal class MainActivity : AppCompatActivity(), CitiesListListener {
+    private val drawer by bindView<DrawerLayout>(R.id.drawer_layout)
     private var descriptionText: TextView? = null
     private var mAppBarConfiguration: AppBarConfiguration? = null
-    private var notesDataSource // Источник данных
-            : NoteDataSource? = null
-    private var noteDataReader // Читатель данных
-            : NoteDataReader? = null
-    private var adapter // Адаптер для RecyclerView
-            : CitiesListFragment.MyAdapter? = null
+    private var notesDataSource: NoteDataSource? = null
+    private var noteDataReader: NoteDataReader? = null
+    private var adapterRV: CitiesListFragment.MyAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +35,6 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         mAppBarConfiguration = AppBarConfiguration.Builder(
             R.id.nav_list_fragment, R.id.nav_fragment_for_n_v
@@ -49,31 +46,6 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         NavigationUI.setupWithNavController(navigationView, navController)
         val viewModel by viewModels<WeatherViewModel>()
         Log.d(TAG, "OnCreate after WeatherViewModel`s joining")
-    }
-
-    override fun onStart() {
-        Log.d(TAG, "onStart")
-        super.onStart()
-    }
-
-    override fun onResume() {
-        Log.d(TAG, "onResume")
-        super.onResume()
-    }
-
-    override fun onPause() {
-        Log.d(TAG, "onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d(TAG, "onStop")
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        Log.d(TAG, "onDestroy")
-        super.onDestroy()
     }
 
     override fun onListItemClick(
@@ -104,7 +76,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     ) {
         notesDataSource = notesDataSourceNoteDataSource
         this.noteDataReader = noteDataReader
-        this.adapter = adapter
+        this.adapterRV = adapter
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -148,9 +120,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     }
 
     private fun addElement() {
-// Выведем диалоговое окно для ввода новой записи
         val factory = LayoutInflater.from(this)
-        // alertView пригодится в дальнейшем для поиска пользовательских элементов
         val alertView = factory.inflate(R.layout.layout_add_city_note, null)
         val builder = AlertDialog.Builder(this)
         builder.setView(alertView)
@@ -159,7 +129,6 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
         builder.setPositiveButton(R.string.menu_add) { dialog, id ->
             val editTextNote = alertView.findViewById<EditText>(R.id.editTextNote)
             val editTextNoteTitle = alertView.findViewById<EditText>(R.id.editTextNoteTitle)
-            // Если использовать findViewById без alertView, то всегда будем получать editText = null
             notesDataSource!!.addNote(
                 editTextNoteTitle.text.toString(),
                 editTextNote.text.toString()
@@ -171,11 +140,10 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
 
     private fun dataUpdated() {
         noteDataReader!!.Refresh()
-        adapter!!.notifyDataSetChanged()
+        adapterRV!!.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
@@ -186,7 +154,7 @@ class MainActivity : AppCompatActivity(), CitiesListListener {
     override fun onSupportNavigateUp(): Boolean {
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         return (NavigationUI.navigateUp(navController, mAppBarConfiguration!!)
-                || super.onSupportNavigateUp())
+            || super.onSupportNavigateUp())
     }
 
     companion object {

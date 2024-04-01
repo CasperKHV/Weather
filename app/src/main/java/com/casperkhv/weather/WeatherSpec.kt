@@ -29,7 +29,6 @@ internal object WeatherSpec {
         currentDate: Date?
     ): String {
 
-        // Форматирование времени как "часы:минуты:секунды"
         val timeFormat: DateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val timeText = timeFormat.format(currentDate)
         return """
@@ -48,7 +47,6 @@ internal object WeatherSpec {
     }
 
     fun getDate(context: Context?, currentDate: Date?): String {
-        // Форматирование времени как "день.месяц.год"
         val dateFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(currentDate)
     }

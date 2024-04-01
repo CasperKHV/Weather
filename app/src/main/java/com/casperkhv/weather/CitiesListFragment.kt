@@ -20,12 +20,9 @@ import java.util.Date
 
 class CitiesListFragment : Fragment() {
     private var errorCode = false
-    private var notesDataSource // Источник данных
-            : NoteDataSource? = null
-    private var noteDataReader // Читатель данных
-            : NoteDataReader? = null
-    private var adapter // Адаптер для RecyclerView
-            : MyAdapter? = null
+    private var notesDataSource: NoteDataSource? = null
+    private var noteDataReader: NoteDataReader? = null
+    private var adapterRV: MyAdapter? = null
     private var savedCity: SharedPreferences? = null
     private var checkBoxPressure: CheckBox? = null
     private var checkBoxFeels: CheckBox? = null
@@ -64,24 +61,9 @@ class CitiesListFragment : Fragment() {
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = RecyclerView.VERTICAL
         citiesCategoriesRecyclerView.layoutManager = layoutManager
-        //        citiesCategoriesRecyclerView.setAdapter(new MyAdapter());
-        adapter = MyAdapter()
-        citiesCategoriesRecyclerView.adapter = adapter
-
-//        adapter = new NoteAdapter(noteDataReader);
-//        adapter.setOnMenuItemClickListener(new NoteAdapter.OnMenuItemClickListener() {
-//            @Override
-//            public void onItemEditClick(CityNote note) {
-//                editElement(note);
-//            }
-//
-//            @Override
-//            public void onItemDeleteClick(CityNote note) {
-//                deleteElement(note);
-//            }
-//        });
-//        citiesCategoriesRecyclerView.setAdapter(adapter);
-        citiesListListener!!.transfer(notesDataSource, noteDataReader, adapter)
+        adapterRV = MyAdapter()
+        citiesCategoriesRecyclerView.adapter = adapterRV
+        citiesListListener!!.transfer(notesDataSource, noteDataReader, adapterRV)
         if (noteDataReader!!.count == 0) {
             initCities()
         }
@@ -92,11 +74,9 @@ class CitiesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializePreferences()
-        checkBoxPressure!!.isChecked =
-            savedCity!!.getBoolean(CHECK_BOX_PRESSURE, false)
+        checkBoxPressure!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_PRESSURE, false)
         checkBoxFeels!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_FEELS, false)
-        checkBoxHumidity!!.isChecked =
-            savedCity!!.getBoolean(CHECK_BOX_HUMIDITY, false)
+        checkBoxHumidity!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_HUMIDITY, false)
         val previousWeatherId = savedCity!!.getInt(PREVIOUS_WEATHER_ID, -1)
         if (previousWeatherId != -1) {
             showActivity(previousWeatherId)
@@ -110,11 +90,6 @@ class CitiesListFragment : Fragment() {
         private val photo: ImageView? = null
         private val textNote: TextView? = null
         private var note: CityNote? = null
-
-        //        void bind(int position) {
-        //            String category = getResources().getStringArray(R.array.cityes_selection)[position];
-        //            categoryNameTextView.setText(category);
-        //        }
         fun bind(note: CityNote?) {
             this.note = note
             categoryNameTextView.text = note!!.title
@@ -125,13 +100,10 @@ class CitiesListFragment : Fragment() {
         }
 
         private fun showPopupMenu(view: View) {
-// Покажем меню на элементе
             val popup = PopupMenu(view.context, view)
             val inflater = popup.menuInflater
             inflater.inflate(R.menu.main_context_menu, popup.menu)
             popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-                // Обработка выбора пункта меню
-                // Делегируем обработку слушателю
                 when (item.itemId) {
                     R.id.menu_edit -> {
                         editElement(note)
@@ -153,12 +125,10 @@ class CitiesListFragment : Fragment() {
             categoryNameTextView =
                 itemView.findViewById<View>(R.id.category_name_text_view) as TextView
 
-// При долгом нажатии на элементе – вытащим  меню
             categoryNameTextView.setOnLongClickListener {
                 showPopupMenu(categoryNameTextView)
                 true
             }
-            // при быстром нажатии откроем инфу о погоде в выбранном городе
             categoryNameTextView.setOnClickListener(this)
         }
     }
@@ -169,23 +139,11 @@ class CitiesListFragment : Fragment() {
             return MyViewHolder(inflater, parent)
         }
 
-        //        @Override
-        //        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //// Создаем новый элемент пользовательского интерфейса
-        //// Через Inflater
-        //            View v = LayoutInflater.from(parent.getContext())
-        //                    .inflate(R.layout.category_list_item, parent, false);
-        //// Здесь можно установить всякие параметры
-        //            MyViewHolder vh = new MyViewHolder(inf);
-        //            return vh;
-        //        }
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//            holder.bind(position);
             holder.bind(noteDataReader!!.getPosition(position))
         }
 
         override fun getItemCount(): Int {
-//            return getResources().getStringArray(R.array.cityes_selection).length;
             return noteDataReader!!.count
         }
     }
@@ -198,12 +156,11 @@ class CitiesListFragment : Fragment() {
                 var resultFeels: String? = null
                 var resultHumidity: String? = null
                 var iconCode: String? = null
-                val currentDate = Date() // Текущее время
+                val currentDate = Date()
                 val city = noteDataReader!!.getPosition(categoryId).description
                 savedCity!!.edit().putInt(PREVIOUS_WEATHER_ID, categoryId).apply()
                 val cityNamesForAPI = resources.getStringArray(R.array.city_names_for_load_weather)
-                //                ModelForGSONWeatherClass weather = controller.start(getActivity(), cityNamesForAPI[categoryId]);
-                val weather = controller.start(activity!!, city)
+                val weather = controller.start(requireActivity(), city)
                 if (weather == null) {
                     errorCode = true
                     return
@@ -270,9 +227,7 @@ class CitiesListFragment : Fragment() {
     }
 
     private fun editElement(note: CityNote?) {
-        // Выведем диалоговое окно для редактирования записи
         val factory = LayoutInflater.from(activity)
-        // alertView пригодится в дальнейшем для поиска пользовательских элементов
         val alertView = factory.inflate(R.layout.layout_add_city_note, null)
         val builder = AlertDialog.Builder(
             requireActivity()
@@ -281,7 +236,6 @@ class CitiesListFragment : Fragment() {
         builder.setTitle(R.string.alert_title_add)
         val editTextNote = alertView.findViewById<EditText>(R.id.editTextNote)
         val editTextNoteTitle = alertView.findViewById<EditText>(R.id.editTextNoteTitle)
-        // Если использовать findViewById без alertView, то всегда будем получать editText = null
         editTextNoteTitle.setText(note!!.title)
         editTextNote.setText(note.description)
         builder.setNegativeButton(R.string.alert_cancel, null)
@@ -303,7 +257,7 @@ class CitiesListFragment : Fragment() {
 
     private fun dataUpdated() {
         noteDataReader!!.Refresh()
-        adapter!!.notifyDataSetChanged()
+        adapterRV!!.notifyDataSetChanged()
     }
 
     private fun initDataSource() {

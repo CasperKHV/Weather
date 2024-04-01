@@ -1,12 +1,8 @@
 package com.casperkhv.weather
 
-// Класс-отражение строк из таблицы
 class HistoryNote {
     var id: Long = 0
-    var date //день сбора данных
-            : String? = null
-    var title //город
-            : String? = null
-    var description //сохранённые данные о погоде
-            : String? = null
+    var date: String? = null
+    var titleCity: String? = null
+    var descriptionWeather: String? = null
 }
