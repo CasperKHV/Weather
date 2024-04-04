@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import kotlin.reflect.KProperty
 
 internal class BindViewDelegate<T : View>(
-    private val rootView: View,
+    private val fragment: Fragment,
     @IdRes private val id: Int,
 ) {
 
@@ -15,6 +15,7 @@ internal class BindViewDelegate<T : View>(
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
         if (view == null) {
+            val rootView = fragment.requireView()
             if (rootView.id == id) {
                 @Suppress("UNCHECKED_CAST")
                 view = rootView as T
@@ -29,7 +30,7 @@ internal class BindViewDelegate<T : View>(
 
 internal fun <T : View> Fragment.bindView(@IdRes id: Int): BindViewDelegate<T> {
     return BindViewDelegate(
-        rootView = requireView(),
+        fragment = this,
         id = id,
     )
 }
