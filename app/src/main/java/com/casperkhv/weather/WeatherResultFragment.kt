@@ -29,13 +29,13 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
     private var adapterRV: MyAdapter? = null
     private val historyListListener: HistoryListListener? = null
     var city: String? = null
-    var history: String? = null
-    var dateForHistory: String? = null
+    private var history: String? = null
+    private var dateForHistory: String? = null
     private var dataForBundle: DataForBundle? = null
-    private var weatherText: TextView? = null
-    private var shareButton: Button? = null
+    private val weatherText by bindView<TextView>(R.id.textview_weather)
+    private val shareButton by bindView<Button>(R.id.button_share)
     private var message: String? = null
-    private var photoWeather: ImageView? = null
+    private val photoWeather by bindView<ImageView>(R.id.photoWeather)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,16 +50,12 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         citiesCategoriesRecyclerView.layoutManager = layoutManager
         adapterRV = MyAdapter()
         citiesCategoriesRecyclerView.adapter = adapterRV
-
-        photoWeather = view.findViewById(R.id.photoWeather)
-        weatherText = view.findViewById(R.id.textview_weather)
-        shareButton = view.findViewById(R.id.button_share)
-        shareButton!!.setOnClickListener(this)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        shareButton.setOnClickListener(this)
         if (savedInstanceState != null) {
             dataForBundle = savedInstanceState.getSerializable(DATA_FOR_BUNDLE) as DataForBundle?
         }
@@ -97,15 +93,15 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
                 else -> {}
             }
             try {
-                photoWeather!!.setImageResource(imageId)
+                photoWeather.setImageResource(imageId)
             } catch (e: NotFoundException) {
                 e.printStackTrace()
-                photoWeather!!.setImageResource(R.drawable.troll_weather)
+                photoWeather.setImageResource(R.drawable.troll_weather)
             }
-            registerForContextMenu(photoWeather!!)
+            registerForContextMenu(photoWeather)
         }
         if (message != null) {
-            weatherText!!.text = message
+            weatherText.text = message
             val intentResult = Intent()
             intentResult.putExtra(
                 CitiesListFragment.Companion.RESULT_OK_STRING,
@@ -158,9 +154,9 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             val packageManager = requireActivity().packageManager
             if (!packageManager.queryIntentActivities(intentShare, 0).isEmpty()) {
                 startActivity(intentShare)
-                shareButton!!.setBackgroundColor(Color.GREEN)
+                shareButton.setBackgroundColor(Color.GREEN)
             } else {
-                shareButton!!.setBackgroundColor(Color.RED)
+                shareButton.setBackgroundColor(Color.RED)
             }
         }
     }
@@ -174,17 +170,17 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.context_menu_hide -> {
-                photoWeather!!.visibility = View.GONE
+                photoWeather.visibility = View.GONE
                 true
             }
 
             R.id.context_menu_set_background -> {
-                photoWeather!!.setBackgroundColor(Color.BLUE)
+                photoWeather.setBackgroundColor(Color.BLUE)
                 true
             }
 
             R.id.context_menu_delete_background -> {
-                photoWeather!!.setBackgroundColor(Color.TRANSPARENT)
+                photoWeather.setBackgroundColor(Color.TRANSPARENT)
                 true
             }
 

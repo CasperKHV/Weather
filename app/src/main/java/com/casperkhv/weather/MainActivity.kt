@@ -33,9 +33,9 @@ internal class MainActivity : AppCompatActivity(), CitiesListListener {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate savedInstanceState$savedInstanceState")
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar by bindView<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        val navigationView by bindView<NavigationView>(R.id.nav_view)
         mAppBarConfiguration = AppBarConfiguration.Builder(
             R.id.nav_list_fragment, R.id.nav_fragment_for_n_v
         )
