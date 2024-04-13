@@ -8,37 +8,34 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 class CheckBoxWeatherResultFragment : Fragment() {
-    var pressureTextView: TextView? = null
-    var feelsTextView: TextView? = null
-    var humidityTextView: TextView? = null
-    var pressure: String? = null
-    var feels: String? = null
-    var humidity: String? = null
+    private val pressureTextView by bindView<TextView>(R.id.textview_pressure)
+    private val feelsTextView by bindView<TextView>(R.id.textview_feels)
+    private val humidityTextView by bindView<TextView>(R.id.textview_humidity)
+    private var pressure: String? = null
+    private var feels: String? = null
+    private var humidity: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_check_box_weather_result, container, false)
-        pressureTextView = view.findViewById(R.id.textview_pressure)
-        feelsTextView = view.findViewById(R.id.textview_feels)
-        humidityTextView = view.findViewById(R.id.textview_humidity)
-        return view
+        return inflater.inflate(R.layout.fragment_check_box_weather_result, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (pressure != null) {
-            pressureTextView!!.visibility = View.VISIBLE
-            pressureTextView!!.text = pressure
+            pressureTextView.visibility = View.VISIBLE
+            pressureTextView.text = pressure
         }
         if (feels != null) {
-            feelsTextView!!.visibility = View.VISIBLE
-            feelsTextView!!.text = feels
+            feelsTextView.visibility = View.VISIBLE
+            feelsTextView.text = feels
         }
         if (humidity != null) {
-            humidityTextView!!.visibility = View.VISIBLE
-            humidityTextView!!.text = humidity
+            humidityTextView.visibility = View.VISIBLE
+            humidityTextView.text = humidity
         }
     }
 

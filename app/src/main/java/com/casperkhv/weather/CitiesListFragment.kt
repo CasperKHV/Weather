@@ -24,11 +24,12 @@ class CitiesListFragment : Fragment() {
     private var noteDataReader: NoteDataReader? = null
     private var adapterRV: MyAdapter? = null
     private var savedCity: SharedPreferences? = null
-    private var checkBoxPressure: CheckBox? = null
-    private var checkBoxFeels: CheckBox? = null
-    private var checkBoxHumidity: CheckBox? = null
-    private var descriptionText: TextView? = null
+    private val checkBoxPressure by bindView<CheckBox>(R.id.checkbox_pressure)
+    private val checkBoxFeels by bindView<CheckBox>(R.id.checkbox_feels)
+    private val checkBoxHumidity by bindView<CheckBox>(R.id.checkbox_humidity)
+    private val descriptionText by bindView<TextView>(R.id.textview_description)
     private var citiesListListener: CitiesListListener? = null
+
 
     internal interface CitiesListListener {
         fun onListItemClick(id: Int, dataForBundle: DataForBundle?, descriptionText: TextView?)
@@ -67,16 +68,15 @@ class CitiesListFragment : Fragment() {
         if (noteDataReader!!.count == 0) {
             initCities()
         }
-        initializeViews(rootView)
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializePreferences()
-        checkBoxPressure!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_PRESSURE, false)
-        checkBoxFeels!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_FEELS, false)
-        checkBoxHumidity!!.isChecked = savedCity!!.getBoolean(CHECK_BOX_HUMIDITY, false)
+        checkBoxPressure.isChecked = savedCity!!.getBoolean(CHECK_BOX_PRESSURE, false)
+        checkBoxFeels.isChecked = savedCity!!.getBoolean(CHECK_BOX_FEELS, false)
+        checkBoxHumidity.isChecked = savedCity!!.getBoolean(CHECK_BOX_HUMIDITY, false)
         val previousWeatherId = savedCity!!.getInt(PREVIOUS_WEATHER_ID, -1)
         if (previousWeatherId != -1) {
             showActivity(previousWeatherId)
@@ -170,15 +170,13 @@ class CitiesListFragment : Fragment() {
                 val resultWeatherHistory =
                     WeatherSpec.getWeatherHistory(activity, weather, currentDate)
                 val dateForHistory = WeatherSpec.getDate(activity, currentDate)
-                if (checkBoxPressure!!.isChecked) {
-                    if (weather != null) {
-                        resultPressure = WeatherSpec.getPressure(activity, weather)
-                    }
+                if (checkBoxPressure.isChecked) {
+                    resultPressure = WeatherSpec.getPressure(activity, weather)
                 }
-                if (checkBoxFeels!!.isChecked) {
+                if (checkBoxFeels.isChecked) {
                     resultFeels = WeatherSpec.getFeels(activity, weather)
                 }
-                if (checkBoxHumidity!!.isChecked) {
+                if (checkBoxHumidity.isChecked) {
                     resultHumidity = WeatherSpec.getHumidity(activity, weather)
                 }
                 iconCode = weather.weather[0]!!.icon
@@ -208,21 +206,14 @@ class CitiesListFragment : Fragment() {
         }
     }
 
-    private fun initializeViews(view: View) {
-        descriptionText = view.findViewById(R.id.textview_description)
-        checkBoxPressure = view.findViewById(R.id.checkbox_pressure)
-        checkBoxFeels = view.findViewById(R.id.checkbox_feels)
-        checkBoxHumidity = view.findViewById(R.id.checkbox_humidity)
-    }
-
     private fun initializePreferences() {
         savedCity = requireActivity().getSharedPreferences(SAVED_CITY, Context.MODE_PRIVATE)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        savedCity!!.edit().putBoolean(CHECK_BOX_PRESSURE, checkBoxPressure!!.isChecked).apply()
-        savedCity!!.edit().putBoolean(CHECK_BOX_FEELS, checkBoxFeels!!.isChecked).apply()
-        savedCity!!.edit().putBoolean(CHECK_BOX_HUMIDITY, checkBoxHumidity!!.isChecked).apply()
+        savedCity!!.edit().putBoolean(CHECK_BOX_PRESSURE, checkBoxPressure.isChecked).apply()
+        savedCity!!.edit().putBoolean(CHECK_BOX_FEELS, checkBoxFeels.isChecked).apply()
+        savedCity!!.edit().putBoolean(CHECK_BOX_HUMIDITY, checkBoxHumidity.isChecked).apply()
         super.onSaveInstanceState(outState)
     }
 

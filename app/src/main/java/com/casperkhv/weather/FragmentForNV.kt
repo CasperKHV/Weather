@@ -18,18 +18,23 @@ import java.io.FileReader
 
 class FragmentForNV : Fragment() {
     private val messageForFile by bindView<EditText>(R.id.edit_text_for_NV)
-    var save: Button? = null
-    var load: Button? = null
-    var delete: Button? = null
-    var showImageFromInternet: Button? = null
-    var imageFromInternet: ImageView? = null
+    private val save by bindView<Button>(R.id.buttonSavePrivate)
+    private val load by bindView<Button>(R.id.buttonLoadPrivate)
+    private val delete by bindView<Button>(R.id.buttonDeletePrivate)
+    private val showImageFromInternet by bindView<Button>(R.id.showImageFromInternet)
+    private val imageFromInternet by bindView<ImageView>(R.id.imageFromInternet)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_for_n_v, container, false)
-        initializeViews(rootView)
-        return rootView
+        return inflater.inflate(R.layout.fragment_for_n_v, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setOnClickListeners()
+
     }
 
     private fun saveFile() {
@@ -107,20 +112,15 @@ class FragmentForNV : Fragment() {
         }.start()
     }
 
-    private fun initializeViews(view: View) {
-        save = view.findViewById(R.id.buttonSavePrivate)
-        save!!.setOnClickListener(View.OnClickListener { saveFile() })
-        load = view.findViewById(R.id.buttonLoadPrivate)
-        load!!.setOnClickListener(View.OnClickListener { loadFile() })
-        delete = view.findViewById(R.id.buttonDeletePrivate)
-        delete!!.setOnClickListener(View.OnClickListener { deleteFile() })
-        imageFromInternet = view.findViewById(R.id.imageFromInternet)
-        showImageFromInternet = view.findViewById(R.id.showImageFromInternet)
-        showImageFromInternet?.setOnClickListener(::showImageFromInternet)
+    private fun setOnClickListeners() {
+        save.setOnClickListener { saveFile() }
+        load.setOnClickListener { loadFile() }
+        delete.setOnClickListener { deleteFile() }
+        showImageFromInternet.setOnClickListener(::showImageFromInternet)
     }
 
     private val isExternalStorageWritable: Boolean
-        private get() {
+        get() {
             val state = Environment.getExternalStorageState()
             return if (Environment.MEDIA_MOUNTED == state) {
                 true
@@ -128,7 +128,7 @@ class FragmentForNV : Fragment() {
         }
 
     private val isExternalStorageReadable: Boolean
-        private get() {
+        get() {
             val state = Environment.getExternalStorageState()
             return if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
                 true
@@ -144,7 +144,7 @@ class FragmentForNV : Fragment() {
             .with(view)
             .load("https://img-fotki.yandex.ru/get/4130/36014149.180/0_80731_c5cd79f0_M.png")
             .override(500)
-            .into(imageFromInternet!!)
+            .into(imageFromInternet)
     }
 
     companion object {
