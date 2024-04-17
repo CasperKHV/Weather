@@ -26,7 +26,7 @@ class NoteDataReaderForHistory(
         cursor!!.close()
     }
 
-    fun Refresh(city: String?) {
+    fun refresh(city: String?) {
         val position = cursor!!.position
         query(city)
         cursor!!.moveToPosition(position)
