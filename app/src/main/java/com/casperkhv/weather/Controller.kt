@@ -30,11 +30,9 @@ class Controller : Callback<ModelForGSONWeatherClass?> {
         try {
             val response = call?.execute()
             if (response != null) {
-                if (response.code() != 200) {
+                if (response.code() != SUCCESS_RESPONSE_CODE) {
                     return null
                 }
-            }
-            if (response != null) {
                 weather = response.body()
             }
         } catch (e: IOException) {
@@ -68,5 +66,6 @@ class Controller : Callback<ModelForGSONWeatherClass?> {
     companion object {
         private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
         private const val OPEN_API_KEY = "6025d97aacdbfdafb3a5676d96e6710f"
+        private const val SUCCESS_RESPONSE_CODE = 200
     }
 }

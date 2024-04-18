@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
@@ -87,8 +86,6 @@ class CitiesListFragment : Fragment() {
         RecyclerView.ViewHolder(inflater.inflate(R.layout.category_list_item, parent, false)),
         View.OnClickListener {
         private val categoryNameTextView: TextView
-        private val photo: ImageView? = null
-        private val textNote: TextView? = null
         private var note: CityNote? = null
         fun bind(note: CityNote?) {
             this.note = note
@@ -166,10 +163,10 @@ class CitiesListFragment : Fragment() {
                     return
                 }
                 val cityForBundle = weather.name
-                val resultWeather = WeatherSpec.getWeather(activity, categoryId, weather)
+                val resultWeather = WeatherSpec.getWeather(activity, weather)
                 val resultWeatherHistory =
                     WeatherSpec.getWeatherHistory(activity, weather, currentDate)
-                val dateForHistory = WeatherSpec.getDate(activity, currentDate)
+                val dateForHistory = WeatherSpec.getDate(currentDate)
                 if (checkBoxPressure.isChecked) {
                     resultPressure = WeatherSpec.getPressure(activity, weather)
                 }

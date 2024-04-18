@@ -122,17 +122,13 @@ class FragmentForNV : Fragment() {
     private val isExternalStorageWritable: Boolean
         get() {
             val state = Environment.getExternalStorageState()
-            return if (Environment.MEDIA_MOUNTED == state) {
-                true
-            } else false
+            return Environment.MEDIA_MOUNTED == state
         }
 
     private val isExternalStorageReadable: Boolean
         get() {
             val state = Environment.getExternalStorageState()
-            return if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
-                true
-            } else false
+            return Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state
         }
 
     private fun showLog(toastMessage: CharSequence) {
@@ -143,11 +139,12 @@ class FragmentForNV : Fragment() {
         Glide
             .with(view)
             .load("https://img-fotki.yandex.ru/get/4130/36014149.180/0_80731_c5cd79f0_M.png")
-            .override(500)
+            .override(SIZE_IMAGE_GLIDE)
             .into(imageFromInternet)
     }
 
     companion object {
         private const val NAME_OF_FILE = "NameOfFile.txt"
+        private const val SIZE_IMAGE_GLIDE = 500
     }
 }

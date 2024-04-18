@@ -1,6 +1,7 @@
 package com.casperkhv.weather
 
-import android.content.*
+import android.content.ContentValues
+import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import java.io.Closeable
