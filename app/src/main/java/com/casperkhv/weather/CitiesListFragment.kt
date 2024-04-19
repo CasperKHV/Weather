@@ -199,7 +199,7 @@ class CitiesListFragment : Fragment() {
         try {
             thread.join()
         } catch (e: InterruptedException) {
-            Log.e("CitiesListFragment", "InterruptedException", e)
+            Log.e("CitiesListFragment", "Thread (name: ${thread.name}) was interrupted", e)
         }
         if (errorCode) {
             errorCode = false
