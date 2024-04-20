@@ -66,7 +66,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             history = dataForBundle!!.history
             dateForHistory = dataForBundle!!.dateForHistory
         } else {
-            throw RuntimeException("DataForBundle is empty")
+            throw IllegalStateException("DataForBundle is empty")
         }
         if (photoWeatherCode != null) {
             var imageId = R.drawable.troll_weather
@@ -94,7 +94,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             try {
                 photoWeather.setImageResource(imageId)
             } catch (e: NotFoundException) {
-                e.printStackTrace()
+                Log.e("WeatherResultFragment", "Image not found (id: $imageId)", e)
                 photoWeather.setImageResource(R.drawable.troll_weather)
             }
             registerForContextMenu(photoWeather)

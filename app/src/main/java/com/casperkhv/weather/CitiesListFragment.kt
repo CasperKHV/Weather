@@ -3,6 +3,7 @@ package com.casperkhv.weather
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -195,7 +196,7 @@ class CitiesListFragment : Fragment() {
         try {
             thread.join()
         } catch (e: InterruptedException) {
-            e.printStackTrace()
+            Log.e("CitiesListFragment", "Thread (name: ${thread.name}) was interrupted", e)
         }
         if (errorCode) {
             errorCode = false

@@ -36,7 +36,7 @@ class Controller : Callback<ModelForGSONWeatherClass?> {
                 weather = response.body()
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.e("Controller", "It seems that the try to read or write failed", e)
         }
         return weather
     }
