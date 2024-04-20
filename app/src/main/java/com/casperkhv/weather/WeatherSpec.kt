@@ -7,7 +7,7 @@ import java.util.Date
 import java.util.Locale
 
 internal object WeatherSpec {
-    fun getWeather(context: Context?, position: Int, weather: ModelForGSONWeatherClass): String {
+    fun getWeather(context: Context?, weather: ModelForGSONWeatherClass): String {
         return """
                ${context!!.getString(R.string.now_in)}${weather.name}": ${weather.main!!.temp}${
             context.getString(
@@ -46,7 +46,7 @@ internal object WeatherSpec {
                """.trimIndent()
     }
 
-    fun getDate(context: Context?, currentDate: Date?): String {
+    fun getDate(currentDate: Date?): String {
         val dateFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(currentDate)
     }

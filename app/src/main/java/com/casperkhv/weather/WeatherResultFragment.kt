@@ -27,7 +27,6 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
     private var noteDataSourceForHistory: NoteDataSourceForHistory? = null
     private var noteDataReaderForHistory: NoteDataReaderForHistory? = null
     private var adapterRV: MyAdapter? = null
-    private val historyListListener: HistoryListListener? = null
     var city: String? = null
     private var history: String? = null
     private var dateForHistory: String? = null
@@ -152,7 +151,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
                 intentShare.putExtra(Intent.EXTRA_TEXT, message)
             }
             val packageManager = requireActivity().packageManager
-            if (!packageManager.queryIntentActivities(intentShare, 0).isEmpty()) {
+            if (packageManager.queryIntentActivities(intentShare, 0).isNotEmpty()) {
                 startActivity(intentShare)
                 shareButton.setBackgroundColor(Color.GREEN)
             } else {
@@ -195,21 +194,10 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
         super.onSaveInstanceState(outState)
     }
 
-    internal interface HistoryListListener {
-        fun onListItemClick(id: Int, dataForBundle: DataForBundle?, descriptionText: TextView?)
-        fun transfer(
-            noteDataSourceForHistory: NoteDataSourceForHistory?,
-            noteDataReaderForHistory: NoteDataReaderForHistory?,
-            adapter: MyAdapter?
-        )
-    }
-
     inner class MyViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup?) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_history, parent, false)),
         View.OnClickListener {
         private val categoryNameTextView: TextView
-        private val photo: ImageView? = null
-        private val textNote: TextView? = null
         private var note: HistoryNote? = null
 
 
@@ -226,10 +214,10 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
             val title = TextView(requireActivity())
             title.text = note!!.date
             title.setBackgroundColor(Color.DKGRAY)
-            title.setPadding(10, 10, 10, 10)
+            title.setPadding(HISTORY_DESCRIPTION_PADDING, HISTORY_DESCRIPTION_PADDING, HISTORY_DESCRIPTION_PADDING, HISTORY_DESCRIPTION_PADDING)
             title.gravity = Gravity.CENTER
             title.setTextColor(Color.WHITE)
-            title.textSize = 20f
+            title.textSize = TEXT_SIZE_OF_HISTORY_DESCRIPTION
             builder.setCustomTitle(title)
             val editTextNote = alertView.findViewById<TextView>(R.id.textDescriptionHistory)
             editTextNote.text = note!!.descriptionWeather
@@ -308,6 +296,8 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
 
     companion object {
         private const val INNER_FRAGMENT_TAG = "inner_fragment_tag"
+        private const val HISTORY_DESCRIPTION_PADDING = 10
+        private const val TEXT_SIZE_OF_HISTORY_DESCRIPTION = 20f
         const val DATA_FOR_BUNDLE = "data for bundle"
         fun newInstance(dataForBundle: Serializable?): WeatherResultFragment {
             val fragment = WeatherResultFragment()

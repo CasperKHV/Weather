@@ -48,7 +48,8 @@ class NoteDataReaderForHistory(
         return database!!.query(
             DatabaseHelperForHistory.Companion.TABLE_NOTES,
             notesAllColumn,
-            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ? AND " + DatabaseHelperForHistory.Companion.COLUMN_DATE + "= ?",
+            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= ? AND " +
+                DatabaseHelperForHistory.Companion.COLUMN_DATE + "= ?",
             arrayOf(city, date),
             null,
             null,

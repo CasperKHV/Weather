@@ -1,6 +1,7 @@
 package com.casperkhv.weather
 
-import android.content.*
+import android.content.ContentValues
+import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import java.io.Closeable
@@ -49,7 +50,8 @@ class NoteDataSourceForHistory(context: Context?) : Closeable {
         database!!.update(
             DatabaseHelperForHistory.Companion.TABLE_NOTES,
             editedNote,
-            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= '" + title + "' AND " + DatabaseHelperForHistory.Companion.COLUMN_DATE + "= '" + date + "'",
+            DatabaseHelperForHistory.Companion.COLUMN_NOTE_TITLE_CITY + "= '" + title + "' AND " +
+                DatabaseHelperForHistory.Companion.COLUMN_DATE + "= '" + date + "'",
             null
         )
     }
