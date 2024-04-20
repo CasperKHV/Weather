@@ -245,7 +245,7 @@ class CitiesListFragment : Fragment() {
     }
 
     private fun dataUpdated() {
-        noteDataReader!!.Refresh()
+        noteDataReader!!.refresh()
         adapterRV!!.notifyDataSetChanged()
     }
 

@@ -57,7 +57,7 @@ internal object WeatherSpec {
     }
 
     fun getFeels(context: Context?, weather: ModelForGSONWeatherClass): String {
-        return context!!.getString(R.string.for_feels_beggining) + weather.main?.feels_like
+        return context!!.getString(R.string.for_feels_beggining) + weather.main?.feelsLike
             .toString() + context.getString(R.string.celsius)
     }
 

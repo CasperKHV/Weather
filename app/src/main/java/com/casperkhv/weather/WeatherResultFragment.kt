@@ -285,7 +285,7 @@ class WeatherResultFragment : Fragment(), View.OnClickListener {
     }
 
     private fun dataUpdated() {
-        noteDataReaderForHistory!!.Refresh(city)
+        noteDataReaderForHistory!!.refresh(city)
         adapterRV!!.notifyDataSetChanged()
     }
 

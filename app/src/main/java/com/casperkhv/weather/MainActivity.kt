@@ -139,7 +139,7 @@ internal class MainActivity : AppCompatActivity(), CitiesListListener {
     }
 
     private fun dataUpdated() {
-        noteDataReader!!.Refresh()
+        noteDataReader!!.refresh()
         adapterRV!!.notifyDataSetChanged()
     }
 

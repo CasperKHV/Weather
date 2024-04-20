@@ -25,7 +25,7 @@ class NoteDataReader(
         cursor!!.close()
     }
 
-    fun Refresh() {
+    fun refresh() {
         val position = cursor!!.position
         query()
         cursor!!.moveToPosition(position)
