@@ -54,6 +54,7 @@
     <string name="Close">Закрыть</string>
     <string name="delete_this_note">Удалить эту запись</string>
     <string name="delete_all_history">Удалить всю историю</string>
+    <string name="cities_open_temperature_details">Показать детали температуры</string>
 
     <string-array name="cityes_selection">
         <item>Хабаровск</item>

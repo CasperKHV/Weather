@@ -42,4 +42,10 @@
         android:layout_height="wrap_content"
         android:text="@string/checkbox_humidity" />
 
+    <Button
+        android:id="@+id/cities_temperature_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/cities_open_temperature_details" />
 </LinearLayout>

@@ -1,12 +1,14 @@
 package com.casperkhv.weather
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.PopupMenu
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.casperkhv.weather.temperature.ui.TemperatureActivity
 import java.util.Date
 
 class CitiesListFragment : Fragment() {
@@ -28,6 +31,7 @@ class CitiesListFragment : Fragment() {
     private val checkBoxFeels by bindView<CheckBox>(R.id.checkbox_feels)
     private val checkBoxHumidity by bindView<CheckBox>(R.id.checkbox_humidity)
     private val descriptionText by bindView<TextView>(R.id.textview_description)
+    private val temperatureButton by bindView<Button>(R.id.cities_temperature_button)
     private var citiesListListener: CitiesListListener? = null
 
 
@@ -77,6 +81,9 @@ class CitiesListFragment : Fragment() {
         checkBoxPressure.isChecked = savedCity!!.getBoolean(CHECK_BOX_PRESSURE, false)
         checkBoxFeels.isChecked = savedCity!!.getBoolean(CHECK_BOX_FEELS, false)
         checkBoxHumidity.isChecked = savedCity!!.getBoolean(CHECK_BOX_HUMIDITY, false)
+        temperatureButton.setOnClickListener {
+            startActivity(Intent(requireContext(), TemperatureActivity::class.java))
+        }
         val previousWeatherId = savedCity!!.getInt(PREVIOUS_WEATHER_ID, -1)
         if (previousWeatherId != -1) {
             showActivity(previousWeatherId)

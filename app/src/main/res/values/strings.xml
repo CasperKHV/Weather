@@ -79,6 +79,7 @@
     <string name="Close">Close</string>
     <string name="delete_this_note">Delete this note</string>
     <string name="delete_all_history">Delete all history</string>
+    <string name="cities_open_temperature_details">Open temperature details</string>
 
     <string-array name="city_names_for_load_weather">
         <item>Khabarovsk,ru</item>
