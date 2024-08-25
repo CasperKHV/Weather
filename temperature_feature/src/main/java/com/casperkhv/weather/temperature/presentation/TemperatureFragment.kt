@@ -1,4 +1,4 @@
-package com.casperkhv.weather.temperature.ui
+package com.casperkhv.weather.temperature.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.casperkhv.weather.temperature.R
 
-class TemperatureFragment : Fragment() {
+internal class TemperatureFragment : Fragment() {
 
     private val viewModel: TemperatureViewModel by viewModels()
 

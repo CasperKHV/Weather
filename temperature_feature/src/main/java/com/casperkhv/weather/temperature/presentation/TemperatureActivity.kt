@@ -1,4 +1,4 @@
-package com.casperkhv.weather.temperature.ui
+package com.casperkhv.weather.temperature.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
