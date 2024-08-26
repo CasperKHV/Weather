@@ -5,3 +5,4 @@ plugins {
 rootProject.name='weather'
 include ':app'
 include ':temperature_feature'
+include ':base_device'

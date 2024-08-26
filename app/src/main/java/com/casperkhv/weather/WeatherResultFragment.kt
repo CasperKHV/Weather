@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.casperkhv.weather.base_device.view.bindView
 import java.io.Serializable
 
 class WeatherResultFragment : Fragment(), View.OnClickListener {

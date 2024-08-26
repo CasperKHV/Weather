@@ -19,6 +19,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.casperkhv.weather.CitiesListFragment.CitiesListListener
+import com.casperkhv.weather.base_device.view.bindView
 import com.google.android.material.navigation.NavigationView
 
 internal class MainActivity : AppCompatActivity(), CitiesListListener {

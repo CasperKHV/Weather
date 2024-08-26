@@ -78,4 +78,5 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.9.0"
 
     implementation(project(":temperature_feature"))
+    implementation(project(":base_device"))
 }

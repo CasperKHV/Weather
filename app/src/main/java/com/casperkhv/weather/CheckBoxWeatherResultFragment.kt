@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.casperkhv.weather.base_device.view.bindView
 
 class CheckBoxWeatherResultFragment : Fragment() {
     private val pressureTextView by bindView<TextView>(R.id.textview_pressure)

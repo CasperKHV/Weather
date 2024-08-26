@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.casperkhv.weather.base_device.view.bindView
 import com.casperkhv.weather.temperature.presentation.TemperatureActivity
 import java.util.Date
 

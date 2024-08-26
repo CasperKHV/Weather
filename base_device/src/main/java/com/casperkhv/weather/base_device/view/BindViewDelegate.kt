@@ -1,4 +1,4 @@
-package com.casperkhv.weather
+package com.casperkhv.weather.base_device.view
 
 import android.app.Activity
 import android.view.View
@@ -6,7 +6,7 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import kotlin.reflect.KProperty
 
-internal class BindViewDelegate<T : View>(
+class BindViewDelegate<T : View>(
     private val fragment: Fragment,
     @IdRes private val id: Int,
 ) {
@@ -28,13 +28,13 @@ internal class BindViewDelegate<T : View>(
     }
 }
 
-internal fun <T : View> Fragment.bindView(@IdRes id: Int): BindViewDelegate<T> {
+fun <T : View> Fragment.bindView(@IdRes id: Int): BindViewDelegate<T> {
     return BindViewDelegate(
         fragment = this,
         id = id,
     )
 }
 
-internal fun <T : View> Activity.bindView(@IdRes id: Int) = lazy<T>(LazyThreadSafetyMode.NONE) {
+fun <T : View> Activity.bindView(@IdRes id: Int) = lazy<T>(LazyThreadSafetyMode.NONE) {
     findViewById(id)
 }

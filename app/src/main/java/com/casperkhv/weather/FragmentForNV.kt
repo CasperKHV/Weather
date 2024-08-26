@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.casperkhv.weather.base_device.view.bindView
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
