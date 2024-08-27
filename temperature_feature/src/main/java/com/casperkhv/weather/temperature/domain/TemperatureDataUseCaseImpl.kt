@@ -6,7 +6,7 @@ internal class TemperatureDataUseCaseImpl(
     private val temperatureRepository: TemperatureRepository,
 ) : TemperatureDataGetUseCase {
 
-    override fun getTemperatureData(): TemperatureData {
-        return temperatureRepository.getTemperatureData()
+    override fun getTemperatureData(city: String): TemperatureData {
+        return temperatureRepository.getTemperatureData(city)
     }
 }

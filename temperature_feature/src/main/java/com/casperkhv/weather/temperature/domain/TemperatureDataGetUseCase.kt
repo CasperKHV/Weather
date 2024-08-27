@@ -8,5 +8,5 @@ import com.casperkhv.weather.temperature.domain.model.TemperatureData
  */
 internal interface TemperatureDataGetUseCase {
 
-    fun getTemperatureData(): TemperatureData
+    fun getTemperatureData(city: String): TemperatureData
 }
